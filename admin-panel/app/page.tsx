@@ -1,8 +1,10 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/components/theme-provider'
-import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X } from 'lucide-react'
+import { useToast, ToastComponent } from '@/components/ui/toast'
+import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff } from 'lucide-react'
 
 const PROJECTS = [
   { name: 'AHCCCSHelp', port: 3001, color: 'bg-blue-500' },
@@ -22,7 +24,23 @@ export default function AdminPanel() {
   const [chats, setChats] = useState([])
   const [activeTab, setActiveTab] = useState('overview')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newEmail, setNewEmail] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [showPasswords, setShowPasswords] = useState({ current: false, new: false })
+  const [updateMessage, setUpdateMessage] = useState('')
   const { theme, setTheme } = useTheme()
+  const { toasts, removeToast, success, error, info } = useToast()
+  const router = useRouter()
+
+  useEffect(() => {
+    const isAuth = localStorage.getItem('adminAuth')
+    if (!isAuth) {
+      router.push('/login')
+      return
+    }
+  }, [router])
 
   useEffect(() => {
     fetch('/api/blogs').then(r => r.json()).then(setBlogs)
@@ -84,6 +102,20 @@ export default function AdminPanel() {
             </button>
           ))}
         </nav>
+        
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => {
+              localStorage.removeItem('adminAuth')
+              info('Logged out successfully')
+              router.push('/login')
+            }}
+            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="font-medium">Logout</span>
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -118,7 +150,12 @@ export default function AdminPanel() {
                   <p className="text-gray-500 dark:text-gray-400 text-xs">admin@gayneco.com</p>
                 </div>
               </div>
-              <Button variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setSettingsOpen(true)}
+              >
                 <Settings className="w-4 h-4" />
               </Button>
             </div>
@@ -264,6 +301,99 @@ export default function AdminPanel() {
           )}
           </div>
         </div>
+      </div>
+
+      {/* Settings Modal */}
+      {settingsOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Admin Settings</h3>
+              <Button variant="ghost" size="sm" onClick={() => setSettingsOpen(false)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            
+            <form onSubmit={async (e) => {
+              e.preventDefault()
+              try {
+                const response = await fetch('/api/admin', {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ currentPassword, newEmail, newPassword })
+                })
+                const data = await response.json()
+                if (data.success) {
+                  success(data.message)
+                  setCurrentPassword('')
+                  setNewEmail('')
+                  setNewPassword('')
+                  setSettingsOpen(false)
+                } else {
+                  error(data.message)
+                }
+              } catch (err) {
+                error('Update failed')
+              }
+            }} className="space-y-4">
+              <div className="relative">
+                <input
+                  type={showPasswords.current ? 'text' : 'password'}
+                  placeholder="Current Password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  required
+                  className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  {showPasswords.current ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              
+              <input
+                type="email"
+                placeholder="New Email (optional)"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              />
+              
+              <div className="relative">
+                <input
+                  type={showPasswords.new ? 'text' : 'password'}
+                  placeholder="New Password (optional)"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  {showPasswords.new ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              
+
+              
+              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                Update Credentials
+              </Button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notifications */}
+      <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
+        {toasts.map(toast => (
+          <ToastComponent key={toast.id} toast={toast} onRemove={removeToast} />
+        ))}
       </div>
     </div>
   )
