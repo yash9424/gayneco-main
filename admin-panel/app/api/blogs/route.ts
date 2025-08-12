@@ -4,11 +4,14 @@ import { db } from '../../../lib/mongodb'
 export async function POST(request: NextRequest) {
   const formData = await request.formData()
   const title = formData.get('title') as string
+  const excerpt = formData.get('excerpt') as string
   const content = formData.get('content') as string
-  const projects = formData.getAll('projects') as string[]
-
+  const projectsString = formData.get('projects') as string
+  const projects = JSON.parse(projectsString || '[]')
+  
   const blogPost = {
     title,
+    excerpt,
     content,
     projects,
     createdAt: new Date()

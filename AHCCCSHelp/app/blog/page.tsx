@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, ArrowRight, BookOpen, TrendingUp, Search, Filter } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -8,72 +9,29 @@ import { Input } from '@/components/ui/input'
 import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
 
-const blogPosts = [
-  {
-    id: 1,
-    title: 'Complete Guide to AHCCCS Pregnancy Confirmation',
-    excerpt: 'Everything you need to know about getting pregnancy confirmation for Arizona Medicaid, including required documents and step-by-step process.',
-    date: 'January 15, 2025',
-    readTime: '8 min read',
-    category: 'AHCCCS Guide',
-    trending: true,
-    image: '/images/pregnancy-test.png'
-  },
-  {
-    id: 2,
-    title: 'WIC Benefits During Pregnancy: Complete Overview',
-    excerpt: 'Comprehensive guide to WIC benefits for pregnant women in Arizona, including eligibility requirements and application process.',
-    date: 'January 12, 2025',
-    readTime: '6 min read',
-    category: 'WIC Benefits',
-    trending: false,
-    image: '/images/wic-support.png'
-  },
-  {
-    id: 3,
-    title: 'Early Pregnancy Signs and When to Get Tested',
-    excerpt: 'Learn about common early pregnancy symptoms and when to seek professional confirmation and prenatal care.',
-    date: 'January 10, 2025',
-    readTime: '5 min read',
-    category: 'Pregnancy Health',
-    trending: true,
-    image: '/images/pregnancy-signs.png'
-  },
-  {
-    id: 4,
-    title: 'Understanding Ultrasound During Early Pregnancy',
-    excerpt: 'What to expect during your first ultrasound appointment and how it helps confirm pregnancy for AHCCCS.',
-    date: 'January 8, 2025',
-    readTime: '7 min read',
-    category: 'Medical Procedures',
-    trending: false,
-    image: '/images/ultrasound-appointment.png'
-  },
-  {
-    id: 5,
-    title: 'Prenatal Care Basics for First-Time Mothers',
-    excerpt: 'Essential information about prenatal care, what to expect, and how to prepare for your pregnancy journey.',
-    date: 'January 5, 2025',
-    readTime: '9 min read',
-    category: 'Pregnancy Health',
-    trending: false,
-    image: '/images/prenatal-visit.png'
-  },
-  {
-    id: 6,
-    title: 'Common Pregnancy Symptoms in the First Trimester',
-    excerpt: 'Understanding normal pregnancy symptoms and when to contact your healthcare provider for concerns.',
-    date: 'January 3, 2025',
-    readTime: '6 min read',
-    category: 'Pregnancy Health',
-    trending: false,
-    image: '/images/pregnancy-symptoms.png'
-  }
-]
-
 const categories = ['All', 'AHCCCS Guide', 'WIC Benefits', 'Pregnancy Health', 'Medical Procedures']
 
 export default function BlogPage() {
+  const [blogPosts, setBlogPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/blogs')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch')
+        return res.json()
+      })
+      .then(data => {
+        setBlogPosts(Array.isArray(data) ? data : [])
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error('Failed to fetch blogs:', err)
+        setBlogPosts([])
+        setLoading(false)
+      })
+  }, [])
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -200,9 +158,19 @@ export default function BlogPage() {
             animate="visible"
           >
             <AnimatePresence>
-              {blogPosts.map((post, index) => (
+              {loading ? (
+                <div className="col-span-full text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+                  <p className="mt-4 text-gray-600 dark:text-gray-400">Loading articles...</p>
+                </div>
+              ) : blogPosts.length === 0 ? (
+                <div className="col-span-full text-center py-12">
+                  <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400 text-lg">No articles available yet.</p>
+                </div>
+              ) : blogPosts.map((post, index) => (
                 <motion.article
-                  key={post.id}
+                  key={post._id}
                   variants={itemVariants}
                   whileHover={{ 
                     scale: 1.03, 
@@ -213,31 +181,17 @@ export default function BlogPage() {
                 >
                   <Card className="h-full hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                     <div className="relative overflow-hidden rounded-t-lg">
-                      <motion.img
-                        src={post.image || "/placeholder.svg?height=250&width=400"}
-                        alt={post.title}
-                        className="w-full h-48 object-cover transition-transform duration-300"
+                      <motion.div
+                        className="w-full h-48 bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900 dark:to-cyan-900 flex items-center justify-center"
                         whileHover={{ scale: 1.1 }}
-                      />
-                      <AnimatePresence>
-                        {post.trending && (
-                          <motion.div 
-                            className="absolute top-4 left-4 bg-orange-500 dark:bg-orange-400 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center"
-                            initial={{ scale: 0, rotate: -180 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            exit={{ scale: 0, rotate: 180 }}
-                            whileHover={{ scale: 1.1 }}
-                          >
-                            <TrendingUp className="w-3 h-3 mr-1" />
-                            Trending
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      >
+                        <BookOpen className="w-16 h-16 text-teal-600 dark:text-teal-400" />
+                      </motion.div>
                       <motion.div 
                         className="absolute top-4 right-4 bg-teal-600 dark:bg-teal-500 text-white px-3 py-1 rounded-full text-sm font-semibold"
                         whileHover={{ scale: 1.1, rotate: 5 }}
                       >
-                        {post.category}
+                        Article
                       </motion.div>
                     </div>
                     
@@ -260,14 +214,7 @@ export default function BlogPage() {
                             whileHover={{ scale: 1.05 }}
                           >
                             <Calendar className="w-4 h-4" />
-                            <span>{post.date}</span>
-                          </motion.div>
-                          <motion.div 
-                            className="flex items-center space-x-1"
-                            whileHover={{ scale: 1.05 }}
-                          >
-                            <Clock className="w-4 h-4" />
-                            <span>{post.readTime}</span>
+                            <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                           </motion.div>
                         </div>
                       </div>

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, ArrowRight, BookOpen, TrendingUp, Search, Filter, Heart, Baby, Stethoscope, User, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -8,88 +9,27 @@ import { Input } from '@/components/ui/input'
 import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
 
-const blogPosts = [
-  {
-    id: 1,
-    title: 'I Just Found Out I\'m Pregnant — What Should I Do First?',
-    excerpt: 'Congratulations! Discovering you\'re pregnant is exciting and overwhelming. Here\'s your complete first-step guide to starting your prenatal journey with confidence.',
-    date: 'January 15, 2025',
-    readTime: '8 min read',
-    category: 'First Steps',
-    trending: true,
-    author: 'Dr. Sarah Johnson',
-    icon: Heart,
-    image: '/images/blog-first-steps.png',
-    gradient: 'from-blue-500 to-cyan-500'
-  },
-  {
-    id: 2,
-    title: 'When Should I Start Seeing an OB/GYN?',
-    excerpt: 'Learn the optimal timing for your first OB appointment, what to expect during early prenatal visits, and how to prepare for your first trimester care.',
-    date: 'January 12, 2025',
-    readTime: '6 min read',
-    category: 'Prenatal Care',
-    trending: false,
-    author: 'Dr. Maria Rodriguez',
-    icon: Stethoscope,
-    image: '/images/blog-ob-appointment.png',
-    gradient: 'from-purple-500 to-pink-500'
-  },
-  {
-    id: 3,
-    title: 'Understanding First Trimester Ultrasounds',
-    excerpt: 'Everything you need to know about early pregnancy ultrasounds, what they reveal, and when to schedule your first imaging appointment.',
-    date: 'January 10, 2025',
-    readTime: '7 min read',
-    category: 'Medical Care',
-    trending: true,
-    author: 'Dr. Jennifer Lee',
-    icon: Baby,
-    image: '/images/blog-ultrasound.png',
-    gradient: 'from-indigo-500 to-purple-500'
-  },
-  {
-    id: 4,
-    title: 'AHCCCS Coverage for Pregnancy Care',
-    excerpt: 'Complete guide to AHCCCS benefits during pregnancy, how to apply, and what services are covered for expecting mothers in Arizona.',
-    date: 'January 8, 2025',
-    readTime: '5 min read',
-    category: 'Insurance',
-    trending: false,
-    author: 'Healthcare Team',
-    icon: Heart,
-    image: '/images/blog-ahcccs.png',
-    gradient: 'from-cyan-500 to-teal-500'
-  },
-  {
-    id: 5,
-    title: 'WIC Program Benefits for New Mothers',
-    excerpt: 'Learn about WIC program benefits, eligibility requirements, and how our clinic can help you access nutritional support during pregnancy.',
-    date: 'January 5, 2025',
-    readTime: '6 min read',
-    category: 'Support Programs',
-    trending: false,
-    author: 'Support Team',
-    icon: Baby,
-    image: '/images/blog-wic.png',
-    gradient: 'from-green-500 to-emerald-500'
-  },
-  {
-    id: 6,
-    title: 'Managing First Trimester Symptoms',
-    excerpt: 'Practical tips for dealing with morning sickness, fatigue, and other common first trimester symptoms. Expert advice from our OB/GYN team.',
-    date: 'January 3, 2025',
-    readTime: '9 min read',
-    category: 'Health Tips',
-    trending: true,
-    author: 'Dr. Sarah Johnson',
-    icon: Stethoscope,
-    image: '/images/blog-symptoms.png',
-    gradient: 'from-rose-500 to-pink-500'
-  }
-]
-
 export default function BlogPage() {
+  const [blogPosts, setBlogPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/blogs')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch')
+        return res.json()
+      })
+      .then(data => {
+        setBlogPosts(Array.isArray(data) ? data : [])
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error('Failed to fetch blogs:', err)
+        setBlogPosts([])
+        setLoading(false)
+      })
+  }, [])
+
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     animate: { opacity: 1, y: 0 },
@@ -168,59 +108,65 @@ export default function BlogPage() {
             <p className="text-gray-600 dark:text-gray-300">Most popular this week</p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="grid lg:grid-cols-2 gap-12 items-center"
-          >
-            <div className="relative">
-              <img
-                src={blogPosts[0].image || "/placeholder.svg"}
-                alt={blogPosts[0].title}
-                className="w-full h-80 object-cover rounded-2xl shadow-lg"
-              />
-              <div className="absolute top-4 left-4">
-                <span className={`px-3 py-1 bg-gradient-to-r ${blogPosts[0].gradient} text-white text-sm font-semibold rounded-full`}>
-                  Featured
-                </span>
-              </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600 dark:text-gray-400">Loading featured article...</p>
             </div>
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
-                <span className={`px-3 py-1 bg-gradient-to-r ${blogPosts[0].gradient} text-white rounded-full`}>
-                  {blogPosts[0].category}
-                </span>
-                <span className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-1" />
-                  {blogPosts[0].date}
-                </span>
-                <span className="flex items-center">
-                  <Clock className="w-4 h-4 mr-1" />
-                  {blogPosts[0].readTime}
-                </span>
-              </div>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight">
-                {blogPosts[0].title}
-              </h3>
-              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                {blogPosts[0].excerpt}
-              </p>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">{blogPosts[0].author}</span>
+          ) : blogPosts.length > 0 ? (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="grid lg:grid-cols-2 gap-12 items-center"
+            >
+              <div className="relative">
+                <div className="w-full h-80 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-2xl shadow-lg flex items-center justify-center">
+                  <BookOpen className="w-24 h-24 text-blue-600 dark:text-blue-400" />
                 </div>
-                <Button variant="ghost" className="text-blue-600 hover:text-blue-700 p-0">
-                  Read More
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                <div className="absolute top-4 left-4">
+                  <span className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-semibold rounded-full">
+                    Featured
+                  </span>
+                </div>
               </div>
+              <div className="space-y-6">
+                <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full">
+                    Article
+                  </span>
+                  <span className="flex items-center">
+                    <Calendar className="w-4 h-4 mr-1" />
+                    {new Date(blogPosts[0].createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight">
+                  {blogPosts[0].title}
+                </h3>
+                <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {blogPosts[0].excerpt}
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">Admin</span>
+                  </div>
+                  <Button variant="ghost" className="text-blue-600 hover:text-blue-700 p-0">
+                    Read More
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          ) : (
+            <div className="text-center py-12">
+              <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600 dark:text-gray-400 text-lg">No featured article available yet.</p>
             </div>
-          </motion.div>
+          )}
         </div>
       </section>
 
@@ -245,30 +191,32 @@ export default function BlogPage() {
             whileInView="animate"
             viewport={{ once: true }}
           >
-            {blogPosts.slice(1).map((post, index) => (
+            {loading ? (
+              <div className="col-span-full text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600 dark:text-gray-400">Loading articles...</p>
+              </div>
+            ) : blogPosts.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600 dark:text-gray-400 text-lg">No articles available yet.</p>
+              </div>
+            ) : blogPosts.slice(1).map((post, index) => (
               <motion.article
-                key={post.id}
+                key={post._id}
                 variants={fadeInUp}
                 whileHover={{ y: -10 }}
                 className="group cursor-pointer"
               >
                 <Card className="h-full bg-white dark:bg-gray-900 border-0 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
                   <div className="relative">
-                    <img
-                      src={post.image || "/placeholder.svg"}
-                      alt={post.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                    <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                      <BookOpen className="w-16 h-16 text-blue-600 dark:text-blue-400" />
+                    </div>
                     <div className="absolute top-4 left-4 flex items-center space-x-2">
-                      <span className={`px-3 py-1 bg-gradient-to-r ${post.gradient} text-white text-xs font-semibold rounded-full`}>
-                        {post.category}
+                      <span className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-semibold rounded-full">
+                        Article
                       </span>
-                      {post.trending && (
-                        <span className="px-3 py-1 bg-red-500 text-white text-xs font-semibold rounded-full flex items-center">
-                          <TrendingUp className="w-3 h-3 mr-1" />
-                          Trending
-                        </span>
-                      )}
                     </div>
                   </div>
                   
@@ -276,11 +224,7 @@ export default function BlogPage() {
                     <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
                       <span className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        {post.date}
-                      </span>
-                      <span className="flex items-center">
-                        <Clock className="w-4 h-4 mr-1" />
-                        {post.readTime}
+                        {new Date(post.createdAt).toLocaleDateString()}
                       </span>
                     </div>
                     
@@ -294,10 +238,10 @@ export default function BlogPage() {
                     
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <div className={`w-8 h-8 bg-gradient-to-r ${post.gradient} rounded-full flex items-center justify-center`}>
+                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
                           <User className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">{post.author}</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Admin</span>
                       </div>
                       <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 p-0">
                         Read More

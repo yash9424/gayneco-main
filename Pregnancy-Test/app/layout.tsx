@@ -6,9 +6,9 @@ import { LanguageProvider } from './contexts/language-context'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'FreePregnancyTestAZ - Pruebas de Embarazo Gratuitas y Atención en Arizona',
-  description: 'Pruebas de embarazo de orina gratuitas, ultrasonidos el mismo día y referencias de WIC en Phoenix, Buckeye y Tonopah. No se necesita seguro.',
-  keywords: 'prueba de embarazo gratuita, Arizona, Phoenix, Buckeye, Tonopah, ultrasonido, WIC, sin seguro',
+  title: 'Pregnancy Test',
+  description: 'Free pregnancy tests, same-day ultrasounds and WIC referrals in Phoenix, Buckeye and Tonopah. No insurance needed.',
+  keywords: 'free pregnancy test, Arizona, Phoenix, Buckeye, Tonopah, ultrasound, WIC, no insurance',
     generator: 'v0.dev'
 }
 

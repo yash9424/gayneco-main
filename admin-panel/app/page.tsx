@@ -4,12 +4,24 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/components/theme-provider'
 import { useToast, ToastComponent } from '@/components/ui/toast'
-import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff } from 'lucide-react'
+import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload } from 'lucide-react'
 
 const PROJECTS = [
   { name: 'AHCCCSHelp', port: 3001, color: 'bg-blue-500' },
   { name: 'First-Trimester', port: 3002, color: 'bg-green-500' },
   { name: 'FreePregnencyTest', port: 3003, color: 'bg-purple-500' },
+  { name: 'Low-cost-pregnancy', port: 3004, color: 'bg-orange-500' },
+  { name: 'NeedUltraSound', port: 3005, color: 'bg-pink-500' },
+  { name: 'Pregnancy-Test', port: 3006, color: 'bg-indigo-500' },
+  { name: 'SameDayUltraSound', port: 3007, color: 'bg-teal-500' },
+  { name: 'Teen-Pregnancy-Support', port: 3008, color: 'bg-red-500' },
+  { name: 'WalkIn-Pregnancy', port: 3009, color: 'bg-yellow-500' },
+  { name: 'Wic-Pregnancy-help', port: 3010, color: 'bg-cyan-500' }
+]
+
+const BLOG_SITES = [
+  { name: 'AHCCCSHelp', port: 3001, color: 'bg-blue-500' },
+  { name: 'First-Trimester', port: 3002, color: 'bg-green-500' },
   { name: 'Low-cost-pregnancy', port: 3004, color: 'bg-orange-500' },
   { name: 'NeedUltraSound', port: 3005, color: 'bg-pink-500' },
   { name: 'Pregnancy-Test', port: 3006, color: 'bg-indigo-500' },
@@ -25,11 +37,20 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState('overview')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [blogFormOpen, setBlogFormOpen] = useState(false)
   const [currentPassword, setCurrentPassword] = useState('')
   const [newEmail, setNewEmail] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [showPasswords, setShowPasswords] = useState({ current: false, new: false })
   const [updateMessage, setUpdateMessage] = useState('')
+  const [blogForm, setBlogForm] = useState({
+    title: '',
+    excerpt: '',
+    description: '',
+    image: null as File | null,
+    selectedSites: [] as string[]
+  })
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const { theme, setTheme } = useTheme()
   const { toasts, removeToast, success, error, info } = useToast()
   const router = useRouter()
@@ -231,48 +252,27 @@ export default function AdminPanel() {
           )}
 
           {activeTab === 'blogs' && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Create New Blog</h2>
-                <form action="/api/blogs" method="POST" className="space-y-4">
-                  <input
-                    name="title"
-                    placeholder="Blog Title"
-                    required
-                    className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-                  />
-                  <textarea
-                    name="content"
-                    placeholder="Blog Content"
-                    required
-                    rows={6}
-                    className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-                  />
-                  <select
-                    name="projects"
-                    multiple
-                    className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  >
-                    {PROJECTS.map((p) => (
-                      <option key={p.name} value={p.name}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
-                  <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Publish Blog
-                  </Button>
-                </form>
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Blog Management</h2>
+                <Button 
+                  onClick={() => setBlogFormOpen(true)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add New Blog
+                </Button>
               </div>
+              
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Recent Blogs</h2>
+                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Recent Blogs</h3>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {blogs.slice(0, 10).map((blog: any) => (
-                    <div key={blog._id} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
-                      <h4 className="font-medium text-gray-900 dark:text-white">{blog.title}</h4>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {blog.projects?.join(', ')}
+                    <div key={blog._id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <h4 className="font-medium text-gray-900 dark:text-white mb-1">{blog.title}</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{blog.excerpt}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Sites: {blog.projects?.join(', ')}
                       </p>
                     </div>
                   ))}
@@ -384,6 +384,179 @@ export default function AdminPanel() {
               <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                 Update Credentials
               </Button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Blog Form Modal */}
+      {blogFormOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Create New Blog</h3>
+              <Button variant="ghost" size="sm" onClick={() => setBlogFormOpen(false)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            
+            <form onSubmit={async (e) => {
+              e.preventDefault()
+              const formData = new FormData()
+              formData.append('title', blogForm.title)
+              formData.append('excerpt', blogForm.excerpt)
+              formData.append('content', blogForm.description)
+              formData.append('projects', JSON.stringify(blogForm.selectedSites))
+              if (blogForm.image) formData.append('image', blogForm.image)
+              
+              try {
+                const response = await fetch('/api/blogs', {
+                  method: 'POST',
+                  body: formData
+                })
+                if (response.ok) {
+                  success('Blog published successfully')
+                  setBlogForm({ title: '', excerpt: '', description: '', image: null, selectedSites: [] })
+                  setImagePreview(null)
+                  setBlogFormOpen(false)
+                  fetch('/api/blogs').then(r => r.json()).then(setBlogs)
+                } else {
+                  error('Failed to publish blog')
+                }
+              } catch (err) {
+                error('Failed to publish blog')
+              }
+            }} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Main Heading</label>
+                <input
+                  type="text"
+                  value={blogForm.title}
+                  onChange={(e) => setBlogForm(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Enter blog title"
+                  required
+                  className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Excerpt</label>
+                <input
+                  type="text"
+                  value={blogForm.excerpt}
+                  onChange={(e) => setBlogForm(prev => ({ ...prev, excerpt: e.target.value }))}
+                  placeholder="Brief description or excerpt"
+                  required
+                  className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload Image</label>
+                <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null
+                      setBlogForm(prev => ({ ...prev, image: file }))
+                      if (file) {
+                        const reader = new FileReader()
+                        reader.onload = (e) => setImagePreview(e.target?.result as string)
+                        reader.readAsDataURL(file)
+                      } else {
+                        setImagePreview(null)
+                      }
+                    }}
+                    className="hidden"
+                    id="image-upload"
+                  />
+                  {imagePreview ? (
+                    <div className="space-y-3">
+                      <img 
+                        src={imagePreview} 
+                        alt="Preview" 
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">{blogForm.image?.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setBlogForm(prev => ({ ...prev, image: null }))
+                            setImagePreview(null)
+                          }}
+                          className="text-red-500 hover:text-red-700 text-sm"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center">
+                      <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Click to upload image</span>
+                    </label>
+                  )}
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                <textarea
+                  value={blogForm.description}
+                  onChange={(e) => setBlogForm(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Full blog content"
+                  required
+                  rows={6}
+                  className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Sites</label>
+                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
+                  {BLOG_SITES.map((project) => (
+                    <label key={project.name} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={blogForm.selectedSites.includes(project.name)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setBlogForm(prev => ({ ...prev, selectedSites: [...prev.selectedSites, project.name] }))
+                          } else {
+                            setBlogForm(prev => ({ ...prev, selectedSites: prev.selectedSites.filter(s => s !== project.name) }))
+                          }
+                        }}
+                        className="rounded border-gray-300 dark:border-gray-600"
+                      />
+                      <span className="text-sm text-gray-900 dark:text-white">{project.name}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Selected: {blogForm.selectedSites.length} sites
+                </p>
+              </div>
+              
+              <div className="flex space-x-3 pt-4">
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  onClick={() => setBlogFormOpen(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  disabled={!blogForm.title || !blogForm.excerpt || !blogForm.description || blogForm.selectedSites.length === 0}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Publish Blog
+                </Button>
+              </div>
             </form>
           </div>
         </div>
