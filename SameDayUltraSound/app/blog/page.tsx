@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { BookOpen, Calendar, ArrowRight } from 'lucide-react'
+import { BookOpen, Calendar, ArrowRight, Phone, MapPin, Clock } from 'lucide-react'
 import Link from 'next/link'
 
 export default function BlogPage() {
@@ -26,7 +26,8 @@ export default function BlogPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-32 pb-20">
+    <>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-24 pb-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Health Blog</h1>
@@ -79,5 +80,81 @@ export default function BlogPage() {
         </div>
       </div>
     </div>
+    
+    {/* Footer matching home page */}
+    <footer className="bg-gray-900 dark:bg-gray-950 text-white py-16">
+      <div className="max-w-7xl mx-auto px-4 w-full">
+        <div className="grid md:grid-cols-3 gap-8">
+          <div>
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-teal-600 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold">S</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold">SameDayUltrasound<span className="text-teal-400">Arizona </span></h3>
+              </div>
+            </div>
+            <p className="text-gray-300">
+              Professional same-day ultrasound services in Phoenix, Arizona.
+            </p>
+          </div>
+          
+          <div>
+            <h4 className="font-bold mb-4">Contact</h4>
+            <div className="space-y-4 text-gray-300">
+              <div className="flex items-start">
+                <MapPin className="w-5 h-5 text-teal-400 mt-0.5 mr-3 flex-shrink-0" />
+                <div>
+                  <p>4700 N 51st Ave</p>
+                  <p>Phoenix, AZ 85031</p>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <Phone className="w-5 h-5 text-teal-400 mr-3 flex-shrink-0" />
+                <a href="tel:623-846-7597" className="hover:text-teal-400 transition-colors">623-846-7597</a>
+              </div>
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 text-teal-400 mr-3 flex-shrink-0" />
+                <span>Mon-Fri: 8AM-5PM</span>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h4 className="font-bold mb-4">Location</h4>
+            <div className="space-y-4">
+              <div className="aspect-w-16 aspect-h-9 w-full h-48 rounded-lg overflow-hidden border border-gray-700">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3327.308996301072!2d-112.17177052480064!3d33.5058241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x872b14c987eaaaab%3A0xaf123434c4d15982!2s4700%20N%2051st%20Ave%20%235%2C%20Phoenix%2C%20AZ%2085031%2C%20USA!5e0!3m2!1sen!2s!4v1620000000000!5m2!1sen!2s"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full"
+                />
+              </div>
+              <a 
+                href="https://www.google.com/maps/dir//4700+N+51st+Ave+%235,+Phoenix,+AZ+85031,+USA/@33.5057968,-112.2515968,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x872b14c987eaaaab:0xaf123434c4d15982!2m2!1d-112.1691956!2d33.5058241?entry=ttu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-teal-400 hover:text-teal-300 transition-colors text-sm"
+              >
+                <MapPin className="w-4 h-4 mr-1" />
+                Get Directions
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+          <p className="text-gray-400">
+            © 2025 SameDayUltrasoundAZ.com
+          </p>
+        </div>
+      </div>
+    </footer>
+    </>
   )
 }
