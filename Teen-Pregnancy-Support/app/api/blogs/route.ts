@@ -1,6 +1,6 @@
 export async function GET() {
   try {
-    const response = await fetch('http://localhost:3011/api/blogs/Teen-Pregnancy-Support')
+    const response = await fetch('http://localhost:3011/api/blogs/site/Teen-Pregnancy-Support')
     if (!response.ok) {
       return Response.json([])
     }
