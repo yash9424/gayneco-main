@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { BookOpen, Calendar } from 'lucide-react'
+import { BookOpen, Calendar, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([])
@@ -45,15 +46,32 @@ export default function BlogPage() {
             </div>
           ) : blogPosts.map((post) => (
             <div key={post._id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-              <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center">
-                <BookOpen className="w-16 h-16 text-blue-600 dark:text-blue-400" />
+              <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center overflow-hidden">
+                {post.image ? (
+                  <img 
+                    src={`data:image/jpeg;base64,${post.image}`} 
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <BookOpen className="w-16 h-16 text-blue-600 dark:text-blue-400" />
+                )}
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{post.title}</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">{post.excerpt}</p>
-                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                  </div>
+                  <Link 
+                    href={`/blog/${post._id}`}
+                    className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium text-sm transition-colors"
+                  >
+                    Read More
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Link>
                 </div>
               </div>
             </div>

@@ -43,14 +43,10 @@ export default function Header() {
               whileHover={{ scale: 1.02 }}
               className="flex flex-col"
             >
-              <span className={`text-xl md:text-2xl font-bold tracking-tight leading-tight transition-colors duration-300 ${
-                isScrolled ? 'text-slate-900' : 'text-white'
-              }`}>
-                <span className="text-medical-500">N</span>eed<span className="text-medical-500">U</span>ltrasound
+              <span className="text-xl md:text-2xl font-bold tracking-tight leading-tight text-slate-900 dark:text-white">
+                <span className="text-blue-600 dark:text-blue-400">N</span>eed<span className="text-blue-600 dark:text-blue-400">U</span>ltrasound
               </span>
-              <span className={`text-xs md:text-sm font-medium tracking-wider transition-colors duration-300 ${
-                isScrolled ? 'text-slate-600' : 'text-white/90'
-              }`}>
+              <span className="text-xs md:text-sm font-medium tracking-wider text-slate-600 dark:text-slate-300">
                 Same Day Pregnancy Care
               </span>
             </motion.div>
@@ -65,17 +61,15 @@ export default function Header() {
                   href={item.href}
                   className={`relative font-medium transition-colors duration-300 ${
                     pathname === item.href
-                      ? isScrolled ? 'text-medical-600' : 'text-medical-300'
-                      : isScrolled ? 'text-slate-900 hover:text-medical-600' : 'text-white hover:text-medical-300'
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : 'text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400'
                   }`}
                 >
                   {item.name}
                   {pathname === item.href && (
                     <motion.div
                       layoutId="activeTab"
-                      className={`absolute -bottom-1 left-0 right-0 h-0.5 ${
-                        isScrolled ? 'bg-medical-600' : 'bg-medical-300'
-                      }`}
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400"
                     />
                   )}
                 </Link>
@@ -85,11 +79,7 @@ export default function Header() {
             {/* Phone Number */}
             <a 
               href="tel:+1234567890" 
-              className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-colors duration-300 ${
-                isScrolled 
-                  ? 'bg-medical-600 text-white hover:bg-medical-700' 
-                  : 'bg-white/10 text-white hover:bg-white/20'
-              }`}
+              className="flex items-center space-x-2 px-4 py-2 rounded-full bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-300"
             >
               <Phone className="h-4 w-4" />
               <span className="font-medium text-sm">(123) 456-7890</span>
@@ -99,9 +89,7 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 rounded-lg transition-colors duration-300 ${
-              isScrolled ? 'text-slate-900' : 'text-white'
-            }`}
+            className="md:hidden p-2 rounded-lg transition-colors duration-300 text-slate-900 dark:text-white"
           >
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -121,8 +109,8 @@ export default function Header() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block px-4 py-2 font-medium transition-colors duration-300 ${
                   pathname === item.href
-                    ? 'text-medical-600 bg-medical-50'
-                    : 'text-slate-900 hover:text-medical-600 hover:bg-medical-50'
+                    ? 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/30'
+                    : 'text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30'
                 }`}
               >
                 {item.name}

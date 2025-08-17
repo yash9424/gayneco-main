@@ -4,8 +4,6 @@ import { motion } from 'framer-motion'
 import { Phone, MessageCircle, Check, Heart, Clock, Shield, Star, Users, Award, TestTube } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import Header from '@/components/header'
-import Footer from '@/components/footer'
 import ChatUI from '@/components/chat-ui'
 
 export default function HomePage() {
@@ -15,8 +13,6 @@ export default function HomePage() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-pink-100/20 dark:from-pink-900/10 via-transparent to-transparent"></div>
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-pink-200/30 dark:from-pink-800/20 to-transparent rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-rose-200/30 dark:from-rose-800/20 to-transparent rounded-full blur-3xl"></div>
-      
-      <Header />
       
       {/* Hero Section */}
       <main className="min-h-screen flex items-center pt-32 pb-16 relative">
@@ -281,7 +277,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Footer />
       <ChatUI />
     </div>
   )

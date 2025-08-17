@@ -8,12 +8,21 @@ export async function POST(request: NextRequest) {
   const content = formData.get('content') as string
   const projectsString = formData.get('projects') as string
   const projects = JSON.parse(projectsString || '[]')
+  const imageFile = formData.get('image') as File | null
+  
+  let imageBase64 = null
+  if (imageFile) {
+    const bytes = await imageFile.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+    imageBase64 = buffer.toString('base64')
+  }
   
   const blogPost = {
     title,
     excerpt,
     content,
     projects,
+    image: imageBase64,
     createdAt: new Date()
   }
 

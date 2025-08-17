@@ -3,8 +3,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
 import Chatbox from "@/components/chatbox"
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
@@ -51,7 +49,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
-      <Header />
       
       <main className="container mx-auto pl-1 pr-4 sm:px-4 py-8 md:py-16">
         {/* Hero Section */}
@@ -224,7 +221,6 @@ export default function HomePage() {
 
       </main>
       
-      <Footer />
       <Chatbox />
     </div>
   )
