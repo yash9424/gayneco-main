@@ -51,6 +51,7 @@ export default function AdminPanel() {
     selectedSites: [] as string[]
   })
   const [editingBlog, setEditingBlog] = useState<any>(null)
+  const [viewingBlog, setViewingBlog] = useState<any>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const { theme, setTheme } = useTheme()
   const { toasts, removeToast, success, error, info } = useToast()
@@ -279,6 +280,14 @@ export default function AdminPanel() {
                           </p>
                         </div>
                         <div className="flex space-x-2 ml-4">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => setViewingBlog(blog)}
+                            className="text-green-600 hover:text-green-800 hover:bg-green-50 dark:hover:bg-green-900/20"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
                           <Button
                             size="sm"
                             variant="ghost"
@@ -617,6 +626,47 @@ export default function AdminPanel() {
                 </Button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* View Blog Modal */}
+      {viewingBlog && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Blog Preview</h3>
+              <Button variant="ghost" size="sm" onClick={() => setViewingBlog(null)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            
+            <div className="space-y-6">
+              {viewingBlog.image && (
+                <div className="w-full h-64 rounded-lg overflow-hidden">
+                  <img 
+                    src={`data:image/jpeg;base64,${viewingBlog.image}`} 
+                    alt={viewingBlog.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{viewingBlog.title}</h1>
+                <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">{viewingBlog.excerpt}</p>
+                <div className="prose dark:prose-invert max-w-none">
+                  <div className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{viewingBlog.content}</div>
+                </div>
+              </div>
+              
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                  <span>Published on: {new Date(viewingBlog.createdAt).toLocaleDateString()}</span>
+                  <span>Sites: {viewingBlog.projects?.join(', ')}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
