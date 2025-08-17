@@ -1,6 +1,6 @@
 export async function GET() {
   try {
-    const response = await fetch('http://localhost:3011/api/blogs/SameDayUltraSound')
+    const response = await fetch('http://localhost:3011/api/blogs/site/SameDayUltraSound')
     if (!response.ok) {
       return Response.json([])
     }
