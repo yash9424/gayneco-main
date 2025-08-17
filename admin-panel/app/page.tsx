@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/components/theme-provider'
 import { useToast, ToastComponent } from '@/components/ui/toast'
-import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload, Edit, Trash2 } from 'lucide-react'
+import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload, Edit, Trash2, ToggleLeft, ToggleRight } from 'lucide-react'
 
 const PROJECTS = [
   { name: 'AHCCCSHelp', port: 3001, color: 'bg-blue-500' },
@@ -286,7 +286,14 @@ export default function AdminPanel() {
                             </div>
                           )}
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900 dark:text-white mb-1">{blog.title}</h4>
+                            <div className="flex items-center gap-2 mb-1">
+                              <h4 className="font-medium text-gray-900 dark:text-white">{blog.title}</h4>
+                              <span className={`px-2 py-1 text-xs rounded-full ${
+                                blog.active !== false ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                              }`}>
+                                {blog.active !== false ? 'Active' : 'Inactive'}
+                              </span>
+                            </div>
                             <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{blog.excerpt}</p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">
                               Sites: {blog.projects?.join(', ')}
@@ -294,6 +301,30 @@ export default function AdminPanel() {
                           </div>
                         </div>
                         <div className="flex space-x-2 ml-4">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(`/api/blogs/${blog._id}`, {
+                                  method: 'PATCH',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ active: blog.active === false })
+                                })
+                                if (response.ok) {
+                                  success(`Blog ${blog.active === false ? 'activated' : 'deactivated'} successfully`)
+                                  fetch('/api/blogs').then(r => r.json()).then(setBlogs)
+                                } else {
+                                  error('Failed to update blog status')
+                                }
+                              } catch (err) {
+                                error('Failed to update blog status')
+                              }
+                            }}
+                            className={`${blog.active !== false ? 'text-orange-600 hover:text-orange-800 hover:bg-orange-50 dark:hover:bg-orange-900/20' : 'text-green-600 hover:text-green-800 hover:bg-green-50 dark:hover:bg-green-900/20'}`}
+                          >
+                            {blog.active !== false ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
+                          </Button>
                           <Button
                             size="sm"
                             variant="ghost"

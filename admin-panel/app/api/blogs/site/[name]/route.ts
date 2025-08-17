@@ -5,7 +5,7 @@ export async function GET(request: NextRequest, { params }: { params: { name: st
   const siteName = params.name
   
   const blogs = await db.collection('blogs')
-    .find({ projects: siteName })
+    .find({ projects: siteName, active: { $ne: false } })
     .sort({ createdAt: -1 })
     .toArray()
   

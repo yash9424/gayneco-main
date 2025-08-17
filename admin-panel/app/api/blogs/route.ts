@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
     content,
     projects,
     image: imageBase64,
+    active: true,
     createdAt: new Date()
   }
 

@@ -65,3 +65,22 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     return Response.json({ error: 'Failed to delete blog' }, { status: 500 })
   }
 }
+
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const { active } = await request.json()
+    
+    const result = await db.collection('blogs').updateOne(
+      { _id: new ObjectId(params.id) },
+      { $set: { active, updatedAt: new Date() } }
+    )
+    
+    if (result.matchedCount === 0) {
+      return Response.json({ error: 'Blog not found' }, { status: 404 })
+    }
+    
+    return Response.json({ success: true })
+  } catch (error) {
+    return Response.json({ error: 'Failed to update blog status' }, { status: 500 })
+  }
+}
