@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/components/theme-provider'
 import { useToast, ToastComponent } from '@/components/ui/toast'
-import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload } from 'lucide-react'
+import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload, Edit, Trash2 } from 'lucide-react'
 
 const PROJECTS = [
   { name: 'AHCCCSHelp', port: 3001, color: 'bg-blue-500' },
@@ -50,6 +50,7 @@ export default function AdminPanel() {
     image: null as File | null,
     selectedSites: [] as string[]
   })
+  const [editingBlog, setEditingBlog] = useState<any>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const { theme, setTheme } = useTheme()
   const { toasts, removeToast, success, error, info } = useToast()
@@ -269,11 +270,59 @@ export default function AdminPanel() {
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {blogs.slice(0, 10).map((blog: any) => (
                     <div key={blog._id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
-                      <h4 className="font-medium text-gray-900 dark:text-white mb-1">{blog.title}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{blog.excerpt}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Sites: {blog.projects?.join(', ')}
-                      </p>
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900 dark:text-white mb-1">{blog.title}</h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{blog.excerpt}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            Sites: {blog.projects?.join(', ')}
+                          </p>
+                        </div>
+                        <div className="flex space-x-2 ml-4">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              setEditingBlog(blog)
+                              setBlogForm({
+                                title: blog.title,
+                                excerpt: blog.excerpt,
+                                description: blog.content,
+                                image: null,
+                                selectedSites: blog.projects || []
+                              })
+                              setBlogFormOpen(true)
+                            }}
+                            className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={async () => {
+                              if (confirm('Are you sure you want to delete this blog?')) {
+                                try {
+                                  const response = await fetch(`/api/blogs/${blog._id}`, {
+                                    method: 'DELETE'
+                                  })
+                                  if (response.ok) {
+                                    success('Blog deleted successfully')
+                                    fetch('/api/blogs').then(r => r.json()).then(setBlogs)
+                                  } else {
+                                    error('Failed to delete blog')
+                                  }
+                                } catch (err) {
+                                  error('Failed to delete blog')
+                                }
+                              }
+                            }}
+                            className="text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -394,8 +443,15 @@ export default function AdminPanel() {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Create New Blog</h3>
-              <Button variant="ghost" size="sm" onClick={() => setBlogFormOpen(false)}>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {editingBlog ? 'Edit Blog' : 'Create New Blog'}
+              </h3>
+              <Button variant="ghost" size="sm" onClick={() => {
+                setBlogFormOpen(false)
+                setEditingBlog(null)
+                setBlogForm({ title: '', excerpt: '', description: '', image: null, selectedSites: [] })
+                setImagePreview(null)
+              }}>
                 <X className="w-4 h-4" />
               </Button>
             </div>
@@ -410,21 +466,24 @@ export default function AdminPanel() {
               if (blogForm.image) formData.append('image', blogForm.image)
               
               try {
-                const response = await fetch('/api/blogs', {
-                  method: 'POST',
+                const url = editingBlog ? `/api/blogs/${editingBlog._id}` : '/api/blogs'
+                const method = editingBlog ? 'PUT' : 'POST'
+                const response = await fetch(url, {
+                  method,
                   body: formData
                 })
                 if (response.ok) {
-                  success('Blog published successfully')
+                  success(editingBlog ? 'Blog updated successfully' : 'Blog published successfully')
                   setBlogForm({ title: '', excerpt: '', description: '', image: null, selectedSites: [] })
                   setImagePreview(null)
                   setBlogFormOpen(false)
+                  setEditingBlog(null)
                   fetch('/api/blogs').then(r => r.json()).then(setBlogs)
                 } else {
-                  error('Failed to publish blog')
+                  error(editingBlog ? 'Failed to update blog' : 'Failed to publish blog')
                 }
               } catch (err) {
-                error('Failed to publish blog')
+                error(editingBlog ? 'Failed to update blog' : 'Failed to publish blog')
               }
             }} className="space-y-4">
               <div>
@@ -554,7 +613,7 @@ export default function AdminPanel() {
                   disabled={!blogForm.title || !blogForm.excerpt || !blogForm.description || blogForm.selectedSites.length === 0}
                 >
                   <FileText className="w-4 h-4 mr-2" />
-                  Publish Blog
+                  {editingBlog ? 'Update Blog' : 'Publish Blog'}
                 </Button>
               </div>
             </form>
