@@ -88,9 +88,12 @@ export default function BlogPost() {
             {post.image && (
               <div className="w-full h-64 md:h-96 overflow-hidden">
                 <img 
-                  src={`data:image/jpeg;base64,${post.image}`} 
+                  src={`data:image/png;base64,${post.image}`} 
                   alt={post.title}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = `data:image/jpeg;base64,${post.image}`
+                  }}
                 />
               </div>
             )}

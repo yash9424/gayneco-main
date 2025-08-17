@@ -272,12 +272,26 @@ export default function AdminPanel() {
                   {blogs.slice(0, 10).map((blog: any) => (
                     <div key={blog._id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
                       <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-gray-900 dark:text-white mb-1">{blog.title}</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{blog.excerpt}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            Sites: {blog.projects?.join(', ')}
-                          </p>
+                        <div className="flex space-x-4 flex-1">
+                          {blog.image && (
+                            <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                              <img 
+                                src={`data:image/png;base64,${blog.image}`} 
+                                alt={blog.title}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = `data:image/jpeg;base64,${blog.image}`
+                                }}
+                              />
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <h4 className="font-medium text-gray-900 dark:text-white mb-1">{blog.title}</h4>
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{blog.excerpt}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              Sites: {blog.projects?.join(', ')}
+                            </p>
+                          </div>
                         </div>
                         <div className="flex space-x-2 ml-4">
                           <Button
@@ -645,9 +659,12 @@ export default function AdminPanel() {
               {viewingBlog.image && (
                 <div className="w-full h-64 rounded-lg overflow-hidden">
                   <img 
-                    src={`data:image/jpeg;base64,${viewingBlog.image}`} 
+                    src={`data:image/png;base64,${viewingBlog.image}`} 
                     alt={viewingBlog.title}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = `data:image/jpeg;base64,${viewingBlog.image}`
+                    }}
                   />
                 </div>
               )}

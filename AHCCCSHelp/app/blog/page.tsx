@@ -53,9 +53,12 @@ export default function BlogPage() {
               <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center overflow-hidden">
                 {post.image ? (
                   <img 
-                    src={`data:image/jpeg;base64,${post.image}`} 
+                    src={`data:image/png;base64,${post.image}`} 
                     alt={post.title}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = `data:image/jpeg;base64,${post.image}`
+                    }}
                   />
                 ) : (
                   <BookOpen className="w-16 h-16 text-blue-600 dark:text-blue-400" />
