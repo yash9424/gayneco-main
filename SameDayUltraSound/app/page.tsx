@@ -312,8 +312,8 @@ export default function HomePage() {
 
 
 
-      {/* Modern Footer */}
- <footer className="bg-gray-900 dark:bg-gray-950 text-white py-16">
+      {/* Footer matching blog page */}
+      <footer className="bg-gray-900 dark:bg-gray-950 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 w-full">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
@@ -350,7 +350,6 @@ export default function HomePage() {
             <div>
               <h4 className="font-bold mb-4">Location</h4>
               <div className="space-y-4">
-                
                 <div className="aspect-w-16 aspect-h-9 w-full h-48 rounded-lg overflow-hidden border border-gray-700">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3327.308996301072!2d-112.17177052480064!3d33.5058241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x872b14c987eaaaab%3A0xaf123434c4d15982!2s4700%20N%2051st%20Ave%20%235%2C%20Phoenix%2C%20AZ%2085031%2C%20USA!5e0!3m2!1sen!2s!4v1620000000000!5m2!1sen!2s"
