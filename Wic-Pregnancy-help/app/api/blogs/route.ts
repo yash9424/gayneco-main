@@ -1,6 +1,6 @@
 export async function GET() {
   try {
-    const response = await fetch('http://localhost:3011/api/blogs/Wic-Pregnancy-help')
+    const response = await fetch('http://localhost:3011/api/blogs/site/Wic-Pregnancy-help')
     if (!response.ok) {
       return Response.json([])
     }
