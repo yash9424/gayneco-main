@@ -31,11 +31,11 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-blue-400" />
-                <span>Phoenix, Arizona</span>
+                <span>4700 N 51st Ave, Phoenix, AZ 85031</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="w-5 h-5 text-blue-400" />
-                <span>Same-Day Available</span>
+                <span>Mon-Fri: 8AM-6PM | Sat: 9AM-3PM</span>
               </div>
             </div>
           </div>
