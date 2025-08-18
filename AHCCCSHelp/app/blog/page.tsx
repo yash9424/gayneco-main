@@ -5,7 +5,7 @@ import { BookOpen, Calendar, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
-import ChatWidget from '@/components/chat-widget'
+import UniversalChat from '@/components/universal-chat'
 
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([])
@@ -86,7 +86,7 @@ export default function BlogPage() {
         </div>
       </div>
       <Footer />
-      <ChatWidget />
+      <UniversalChat siteName="AHCCCSHelp" />
     </div>
   )
 }

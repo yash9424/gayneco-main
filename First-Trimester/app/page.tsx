@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import { Phone, MessageSquare, Check, Star, Clock, Shield, Award, Users, ArrowRight, Calendar, MapPin, Sparkles, Heart, Baby, Zap, ChevronDown, Stethoscope } from 'lucide-react'
+import UniversalChat from '@/components/universal-chat'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import Navigation from '@/components/navigation'
@@ -438,6 +439,7 @@ export default function HomePage() {
       </section>
 
       <Footer />
+          <UniversalChat siteName="First-Trimester" />
     </div>
   )
 }

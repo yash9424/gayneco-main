@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import Chatbox from "@/components/chatbox"
+import UniversalChat from "@/components/universal-chat"
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef } from "react"
@@ -221,7 +221,7 @@ export default function HomePage() {
 
       </main>
       
-      <Chatbox />
+      <UniversalChat siteName="Wic-Pregnancy-help" />
     </div>
   )
 }

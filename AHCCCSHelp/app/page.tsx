@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
-import ChatWidget from '@/components/chat-widget'
+import UniversalChat from '@/components/universal-chat'
 import { useRef } from 'react'
 
 export default function HomePage() {
@@ -556,7 +556,7 @@ export default function HomePage() {
       </section>
 
       <Footer />
-      <ChatWidget />
+      <UniversalChat siteName="AHCCCSHelp" />
     </div>
   )
 }

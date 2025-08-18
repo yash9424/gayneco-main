@@ -1,10 +1,9 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import dynamic from "next/dynamic"
-const Chatbox = dynamic(() => import("@/components/Chatbox"), { ssr: false })
 import { Card, CardContent } from "@/components/ui/card"
 import { Phone, CheckCircle, Calendar, FileText, Stethoscope, Shield, Heart, Award, Clock, Star, Users, ArrowRight, Baby, Activity, MapPin, Sparkles } from 'lucide-react'
+import UniversalChat from '@/components/universal-chat'
 import Link from "next/link"
 import Header from "@/components/header"
 import { AnimatedBackground } from "@/components/animated-background"
@@ -387,7 +386,7 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
-      <Chatbox />
+      <UniversalChat siteName="SameDayUltraSound" />
     </div>
   )
 }

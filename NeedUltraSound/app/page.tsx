@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Phone, Clock, MapPin, Heart, Baby, Users, User } from 'lucide-react'
+import UniversalChat from '@/components/universal-chat'
 import HeroBackground from '@/components/hero-background'
 
 const fadeInUp = {
@@ -214,6 +215,7 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section> */}
+          <UniversalChat siteName="NeedUltraSound" />
     </div>
   )
 }

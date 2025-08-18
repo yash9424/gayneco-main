@@ -1,4 +1,4 @@
-import ChatUI from '@/components/chat-ui'
+import UniversalChat from '@/components/universal-chat'
 
 export default function ChatPage() {
   return (
@@ -13,14 +13,11 @@ export default function ChatPage() {
           </p>
         </div>
         
-        <div className="flex justify-center">
-          <ChatUI />
-        </div>
-        
         <div className="mt-8 text-center text-sm text-gray-500">
           <p>This chat is for informational purposes. For medical emergencies, please call 911.</p>
         </div>
       </div>
+      <UniversalChat siteName="Low-cost-pregnancy" />
     </div>
   )
 }

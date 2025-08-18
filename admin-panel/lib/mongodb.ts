@@ -1,6 +1,14 @@
 import { MongoClient } from 'mongodb'
 
-const client = new MongoClient('mongodb://localhost:27017')
-const db = client.db('gynecologist')
+let client: MongoClient
+let db: any
 
-export { db }
+if (!client) {
+  client = new MongoClient('mongodb://localhost:27017')
+}
+
+if (!db) {
+  db = client.db('gynecologist')
+}
+
+export { db, client }

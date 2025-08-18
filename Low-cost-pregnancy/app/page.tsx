@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Heart, Stethoscope, FileText } from 'lucide-react'
+import UniversalChat from '@/components/universal-chat'
 import { AnimatedBackground } from "@/components/animated-background"
-import ChatWidget from "@/components/chat-widget"
 import Image from "next/image"
 
 export default function HomePage() {
@@ -165,7 +165,7 @@ export default function HomePage() {
           </div>
         </section>
       </div>
-      <ChatWidget />
+      <UniversalChat siteName="Low-cost-pregnancy" />
     </>
   )
 }

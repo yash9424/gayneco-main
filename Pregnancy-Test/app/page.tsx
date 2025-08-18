@@ -8,6 +8,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { useLanguage } from './contexts/language-context'
+import UniversalChat from '@/components/universal-chat'
 
 
 export default function HomePage() {
@@ -15,28 +16,14 @@ export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
-  const [showChatForm, setShowChatForm] = useState(true)
-  const [chatFormData, setChatFormData] = useState({ name: '', contact: '', age: '' })
-  const [messages, setMessages] = useState([])
-  const [currentMessage, setCurrentMessage] = useState('')
+
 
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
 
-  const handleSendMessage = () => {
-    if (currentMessage.trim()) {
-      setMessages(prev => [...prev, { text: currentMessage, isUser: true }])
-      setCurrentMessage('')
-      
-      // Auto reply after 1 second
-      setTimeout(() => {
-        const replyMessage = language === 'es' ? '¡Gracias por tu mensaje! Nuestro equipo te responderá pronto.' : 'Thank you for your message. Our team will get back to you soon!'
-        setMessages(prev => [...prev, { text: replyMessage, isUser: false }])
-      }, 1000)
-    }
-  }
+
 
   const services = [
     {
@@ -389,111 +376,10 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {/* Floating Chat Button */}
-      <button
-        onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-green-700 hover:bg-green-800 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110 animate-pulse-glow"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </button>
+      {/* Universal Chat Component */}
+      <UniversalChat siteName="Pregnancy-Test" />
 
-      {/* Chat UI */}
-      {isChatOpen && (
-        <div className="fixed bottom-20 right-6 z-50">
-          <div className="bg-white rounded-xl shadow-2xl w-80 h-96 flex flex-col">
-            <div className="flex items-center justify-between p-4 bg-green-700 text-white rounded-t-xl">
-              <h3 className="font-bold">{language === 'es' ? 'Chatea con Nosotros' : 'Chat with Us'}</h3>
-              <button
-                onClick={() => { setIsChatOpen(false); setShowChatForm(true); }}
-                className="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            
-            {showChatForm ? (
-              <div className="flex-1 p-4">
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{language === 'es' ? 'Nombre' : 'Name'}</label>
-                    <input
-                      type="text"
-                      value={chatFormData.name}
-                      onChange={(e) => setChatFormData({...chatFormData, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      placeholder={language === 'es' ? 'Tu nombre' : 'Your name'}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{language === 'es' ? 'Contacto' : 'Contact'}</label>
-                    <input
-                      type="text"
-                      value={chatFormData.contact}
-                      onChange={(e) => setChatFormData({...chatFormData, contact: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      placeholder={language === 'es' ? 'Teléfono o email' : 'Phone or email'}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{language === 'es' ? 'Edad' : 'Age'}</label>
-                    <input
-                      type="number"
-                      value={chatFormData.age}
-                      onChange={(e) => setChatFormData({...chatFormData, age: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      placeholder={language === 'es' ? 'Tu edad' : 'Your age'}
-                    />
-                  </div>
-                  <button
-                    onClick={() => setShowChatForm(false)}
-                    disabled={!chatFormData.name || !chatFormData.contact || !chatFormData.age}
-                    className="w-full py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {language === 'es' ? 'Iniciar Chat' : 'Start Chat'}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="flex-1 p-4 bg-gray-50 overflow-y-auto">
-                  <div className="bg-white p-3 rounded-lg shadow-sm mb-3">
-                    <p className="text-sm text-gray-700">{language === 'es' ? `¡Hola ${chatFormData.name}! ¿Cómo podemos ayudarte hoy?` : `Hello ${chatFormData.name}! How can we help you today?`}</p>
-                  </div>
-                  {messages.map((msg, index) => (
-                    <div key={index} className={`mb-3 ${msg.isUser ? 'text-right' : 'text-left'}`}>
-                      <div className={`inline-block p-3 rounded-lg shadow-sm max-w-xs ${
-                        msg.isUser 
-                          ? 'bg-green-700 text-white' 
-                          : 'bg-white text-gray-700'
-                      }`}>
-                        <p className="text-sm">{msg.text}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="p-4 bg-green-700 rounded-b-xl">
-                  <div className="flex space-x-2">
-                    <input
-                      type="text"
-                      value={currentMessage}
-                      onChange={(e) => setCurrentMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                      placeholder={language === 'es' ? 'Escribe tu mensaje...' : 'Type your message...'}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
-                    />
-                    <button 
-                      onClick={handleSendMessage}
-                      className="px-3 py-2 bg-white text-emerald-600 rounded-lg hover:bg-gray-100"
-                    >
-                      <Send className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+
 
 
     </div>

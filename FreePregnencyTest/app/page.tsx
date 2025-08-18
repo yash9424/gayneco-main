@@ -3,19 +3,13 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Phone, MessageCircle, MapPin, Clock, Star } from 'lucide-react'
+import UniversalChat from '@/components/universal-chat'
 import Image from "next/image"
-import dynamic from 'next/dynamic';
 
-// Dynamically import the Chatbox component with SSR disabled
-const Chatbox = dynamic(
-  () => import('@/components/chatbox'),
-  { ssr: false }
-);
 
 export default function Component() {
   return (
     <div className="min-h-screen relative">
-      <Chatbox />
       {/* Hero Section with Background Image - No Scroll */}
       <section className="relative w-full" style={{ height: '100dvh' }}>
         {/* Background Image */}
@@ -354,6 +348,7 @@ export default function Component() {
           opacity: 0;
         }
       `}</style>
+          <UniversalChat siteName="FreePregnencyTest" />
     </div>
   )
 }

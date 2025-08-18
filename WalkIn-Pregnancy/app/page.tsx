@@ -2,9 +2,9 @@
 
 import { motion } from 'framer-motion'
 import { Phone, MessageCircle, Check, Heart, Clock, Shield, Star, Users, Award, TestTube } from 'lucide-react'
+import UniversalChat from '@/components/universal-chat'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import ChatUI from '@/components/chat-ui'
 
 export default function HomePage() {
   return (
@@ -277,7 +277,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ChatUI />
+      <UniversalChat siteName="WalkIn-Pregnancy" />
     </div>
   )
 }
