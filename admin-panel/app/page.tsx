@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/components/theme-provider'
 import { useToast, ToastComponent } from '@/components/ui/toast'
-import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload, Edit, Trash2, Send, Bell } from 'lucide-react'
+import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload, Edit, Trash2, Send, Bell, BarChart3 } from 'lucide-react'
 
 const PROJECTS = [
   { name: 'AHCCCSHelp', port: 3001, color: 'bg-blue-500' },
@@ -34,6 +34,7 @@ const BLOG_SITES = [
 export default function AdminPanel() {
   const [blogs, setBlogs] = useState([])
   const [chats, setChats] = useState([])
+  const [analytics, setAnalytics] = useState<any>(null)
   const [activeTab, setActiveTab] = useState('overview')
 
   useEffect(() => {
@@ -119,11 +120,25 @@ export default function AdminPanel() {
   useEffect(() => {
     fetch('/api/blogs').then(r => r.json()).then(setBlogs)
     fetchConversations()
+    fetchAnalytics()
     
-    // Auto-refresh conversations every 5 seconds
-    const interval = setInterval(fetchConversations, 5000)
+    // Auto-refresh data every 30 seconds
+    const interval = setInterval(() => {
+      fetchConversations()
+      fetchAnalytics()
+    }, 30000)
     return () => clearInterval(interval)
   }, [])
+  
+  const fetchAnalytics = async () => {
+    try {
+      const response = await fetch('/api/analytics')
+      const data = await response.json()
+      setAnalytics(data)
+    } catch (err) {
+      console.error('Failed to fetch analytics:', err)
+    }
+  }
   
   const fetchConversations = async () => {
     try {
@@ -311,42 +326,148 @@ export default function AdminPanel() {
         <div className="flex-1 overflow-y-auto p-6">
           <div key={activeTab} className="transition-all duration-300">
             {activeTab === 'overview' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Total Sites</p>
-                      <p className="text-3xl font-bold text-gray-900 dark:text-white">{PROJECTS.length}</p>
+              <div className="space-y-6">
+                {/* Real-time Stats */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Total Sites</p>
+                        <p className="text-3xl font-bold text-gray-900 dark:text-white">{PROJECTS.length}</p>
+                      </div>
+                      <Globe className="w-8 h-8 text-blue-500" />
                     </div>
-                    <Globe className="w-8 h-8 text-blue-500" />
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Total Blogs</p>
+                        <p className="text-3xl font-bold text-gray-900 dark:text-white">{blogs.length}</p>
+                      </div>
+                      <FileText className="w-8 h-8 text-green-500" />
+                    </div>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Conversations</p>
+                        <p className="text-3xl font-bold text-gray-900 dark:text-white">{chats.length}</p>
+                      </div>
+                      <MessageSquare className="w-8 h-8 text-purple-500" />
+                    </div>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Total Users</p>
+                        <p className="text-3xl font-bold text-gray-900 dark:text-white">{analytics?.totalUsers || 0}</p>
+                      </div>
+                      <Users className="w-8 h-8 text-orange-500" />
+                    </div>
                   </div>
                 </div>
+
+                {/* Site Activity Chart */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Total Blogs</p>
-                      <p className="text-3xl font-bold text-gray-900 dark:text-white">{blogs.length}</p>
-                    </div>
-                    <FileText className="w-8 h-8 text-green-500" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">User Activity by Site</h3>
+                  <div className="space-y-3">
+                    {analytics?.geoData?.map((item: any, index: number) => {
+                      const maxUsers = Math.max(...(analytics?.geoData?.map((d: any) => d.users) || [1]))
+                      return (
+                        <div key={item.project} className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-4 h-4 rounded-full bg-gradient-to-r ${[
+                              'from-blue-500 to-blue-600',
+                              'from-green-500 to-green-600', 
+                              'from-purple-500 to-purple-600',
+                              'from-orange-500 to-orange-600',
+                              'from-pink-500 to-pink-600',
+                              'from-indigo-500 to-indigo-600',
+                              'from-teal-500 to-teal-600',
+                              'from-red-500 to-red-600'
+                            ][index % 8]}`}></div>
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">{item.project}</span>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{item.users} users</span>
+                            <div className="w-24 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                              <div 
+                                className={`h-2 rounded-full bg-gradient-to-r ${[
+                                  'from-blue-500 to-blue-600',
+                                  'from-green-500 to-green-600', 
+                                  'from-purple-500 to-purple-600',
+                                  'from-orange-500 to-orange-600',
+                                  'from-pink-500 to-pink-600',
+                                  'from-indigo-500 to-indigo-600',
+                                  'from-teal-500 to-teal-600',
+                                  'from-red-500 to-red-600'
+                                ][index % 8]}`}
+                                style={{ width: `${maxUsers > 0 ? (item.users / maxUsers) * 100 : 0}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }) || []}
                   </div>
                 </div>
+
+                {/* Chat Statistics */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Conversations</p>
-                      <p className="text-3xl font-bold text-gray-900 dark:text-white">{chats.length}</p>
-                    </div>
-                    <MessageSquare className="w-8 h-8 text-purple-500" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Chat Statistics by Site</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {analytics?.chatStats?.map((stat: any, index: number) => (
+                      <div key={stat.project} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white">{stat.project}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{stat.uniqueUsers} unique users</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stat.totalChats}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">total chats</p>
+                        </div>
+                      </div>
+                    )) || []}
                   </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Active Users</p>
-                      <p className="text-3xl font-bold text-gray-900 dark:text-white">1.2k</p>
+
+                {/* Recent Activity */}
+                {analytics?.recentActivity?.length > 0 && (
+                  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity (Last 7 Days)</h3>
+                    <div className="space-y-2">
+                      {analytics.recentActivity.slice(0, 10).map((activity: any, index: number) => (
+                        <div key={index} className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-700 rounded">
+                          <div className="flex items-center space-x-3">
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">{activity._id.project}</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">{activity._id.date}</span>
+                          </div>
+                          <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{activity.count} chats</span>
+                        </div>
+                      ))}
                     </div>
-                    <Users className="w-8 h-8 text-orange-500" />
                   </div>
+                )}
+
+                {/* Blog Statistics */}
+                {analytics?.blogStats?.length > 0 && (
+                  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Blog Distribution</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {analytics.blogStats.map((blog: any, index: number) => (
+                        <div key={blog.project} className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">{blog.project}</p>
+                          <p className="text-xl font-bold text-green-600 dark:text-green-400">{blog.totalBlogs}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">blogs</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Last Updated */}
+                <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+                  Last updated: {analytics?.timestamp ? new Date(analytics.timestamp).toLocaleString() : 'Loading...'}
                 </div>
               </div>
             )}
