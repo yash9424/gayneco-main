@@ -52,7 +52,7 @@ export function useToast() {
 
   const addToast = (type: Toast['type'], message: string) => {
     const id = Date.now().toString()
-    setToasts(prev => [...prev, { id, type, message }])
+    setToasts([{ id, type, message }])
   }
 
   const removeToast = (id: string) => {

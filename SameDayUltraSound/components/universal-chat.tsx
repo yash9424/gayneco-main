@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { MessageCircle, X, Send } from 'lucide-react'
 
 interface ChatProps {
@@ -14,30 +14,44 @@ export default function UniversalChat({ siteName }: ChatProps) {
   const [messages, setMessages] = useState<any[]>([])
   const [currentMessage, setCurrentMessage] = useState('')
   const [conversationId, setConversationId] = useState('')
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const startChat = async () => {
     try {
-      const response = await fetch('http://localhost:3011/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: `Hello, I'm ${userInfo.name}. I need help.`,
-          project: siteName,
-          userInfo
-        })
-      })
+      // First check if conversation already exists
+      const checkResponse = await fetch(`http://localhost:3011/api/chat?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
+      const checkData = await checkResponse.json()
       
-      const data = await response.json()
-      
-      if (data.success) {
-        setConversationId(data.chatId)
+      if (checkData.exists) {
+        // Load existing conversation
+        setConversationId(checkData.chatId)
+        setMessages(checkData.messages)
         setShowForm(false)
-        setMessages([{
-          _id: Date.now(),
-          message: `Hello, I'm ${userInfo.name}. I need help.`,
-          isAdmin: false,
-          timestamp: new Date()
-        }])
+        return
+      } else {
+        // Start new conversation
+        const response = await fetch('http://localhost:3011/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: `Hello, I'm ${userInfo.name}. I need help.`,
+            project: siteName,
+            userInfo
+          })
+        })
+        
+        const data = await response.json()
+        
+        if (data.success) {
+          setConversationId(data.chatId)
+          setShowForm(false)
+          setMessages([{
+            _id: Date.now(),
+            message: `Hello, I'm ${userInfo.name}. I need help.`,
+            isAdmin: false,
+            timestamp: new Date()
+          }])
+        }
       }
     } catch (err) {
       console.error('Failed to start chat:', err)
@@ -91,6 +105,10 @@ export default function UniversalChat({ siteName }: ChatProps) {
       return () => clearInterval(interval)
     }
   }, [conversationId])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   return (
     <>
@@ -178,6 +196,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       </div>
                     </div>
                   ))}
+                  <div ref={messagesEndRef} />
                 </div>
                 <div className="p-4 bg-gradient-to-r from-teal-600 to-blue-600 rounded-b-xl">
                   <div className="flex space-x-2">

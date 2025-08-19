@@ -5,10 +5,12 @@ import bcrypt from 'bcryptjs'
 export async function POST(request: NextRequest) {
   const { email, password } = await request.json()
   
-  const admin = await db.collection('admins').findOne({ email })
+  // Default admin credentials
+  const defaultEmail = 'admin@gayneco.com'
+  const defaultPassword = 'admin123'
   
-  if (admin && await bcrypt.compare(password, admin.password)) {
-    return Response.json({ success: true, admin: { email: admin.email, name: admin.name } })
+  if (email === defaultEmail && password === defaultPassword) {
+    return Response.json({ success: true, admin: { email, name: 'Admin User' } })
   } else {
     return Response.json({ success: false, message: 'Invalid credentials' }, { status: 401 })
   }

@@ -18,19 +18,17 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
+      const defaultEmail = 'admin@gayneco.com'
+      const defaultPassword = 'admin123'
+      const updatedPassword = localStorage.getItem('adminPassword')
       
-      const data = await response.json()
+      const validPassword = updatedPassword || defaultPassword
       
-      if (data.success) {
+      if (email === defaultEmail && password === validPassword) {
         localStorage.setItem('adminAuth', 'true')
         router.push('/')
       } else {
-        setError(data.message || 'Invalid credentials')
+        setError('Invalid credentials')
       }
     } catch (error) {
       setError('Login failed. Please try again.')

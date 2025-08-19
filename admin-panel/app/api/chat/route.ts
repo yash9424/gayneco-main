@@ -8,8 +8,28 @@ export async function POST(request: NextRequest) {
     
     const { message, project, userInfo, isAdmin, chatId } = await request.json()
     
+    let finalChatId = chatId
+    
+    // If no chatId provided, check for existing conversation based on user identity
+    if (!chatId && userInfo && !isAdmin) {
+      const userIdentity = `${userInfo.name}_${userInfo.age}_${userInfo.contact}_${project}`
+      
+      // Look for existing conversation with same user identity
+      const existingChat = await db.collection('chats')
+        .findOne({ userIdentity }, { sort: { timestamp: -1 } })
+      
+      if (existingChat) {
+        finalChatId = existingChat.chatId
+      } else {
+        finalChatId = new ObjectId().toString()
+      }
+    } else if (!chatId) {
+      finalChatId = new ObjectId().toString()
+    }
+    
     const chatMessage = {
-      chatId: chatId || new ObjectId().toString(),
+      chatId: finalChatId,
+      userIdentity: userInfo && !isAdmin ? `${userInfo.name}_${userInfo.age}_${userInfo.contact}_${project}` : null,
       project,
       userInfo,
       message,
@@ -19,7 +39,7 @@ export async function POST(request: NextRequest) {
     
     await db.collection('chats').insertOne(chatMessage)
     
-    const response = Response.json({ success: true, chatId: chatMessage.chatId })
+    const response = Response.json({ success: true, chatId: finalChatId })
     response.headers.set('Access-Control-Allow-Origin', '*')
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type')
@@ -38,6 +58,10 @@ export async function GET(request: NextRequest) {
     
     const { searchParams } = new URL(request.url)
     const chatId = searchParams.get('chatId')
+    const name = searchParams.get('name')
+    const age = searchParams.get('age')
+    const contact = searchParams.get('contact')
+    const project = searchParams.get('project')
     
     let response
     if (chatId) {
@@ -46,17 +70,35 @@ export async function GET(request: NextRequest) {
         .sort({ timestamp: 1 })
         .toArray()
       response = Response.json(messages)
+    } else if (name && age && contact && project) {
+      // Check for existing conversation
+      const userIdentity = `${name}_${age}_${contact}_${project}`
+      const existingMessages = await db.collection('chats')
+        .find({ userIdentity })
+        .sort({ timestamp: 1 })
+        .toArray()
+      
+      if (existingMessages.length > 0) {
+        response = Response.json({ 
+          exists: true, 
+          chatId: existingMessages[0].chatId,
+          messages: existingMessages 
+        })
+      } else {
+        response = Response.json({ exists: false })
+      }
     } else {
       const chats = await db.collection('chats')
         .aggregate([
           { $sort: { timestamp: -1 } },
           { $group: {
-            _id: { chatId: '$chatId', project: '$project' },
+            _id: { userIdentity: '$userIdentity', project: '$project' },
             userInfo: { $first: '$userInfo' },
             lastMessage: { $first: '$timestamp' },
             project: { $first: '$project' },
             chatId: { $first: '$chatId' }
-          }}
+          }},
+          { $match: { '_id.userIdentity': { $ne: null } } }
         ])
         .toArray()
       response = Response.json(chats)
