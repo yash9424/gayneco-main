@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Phone, MapPin, Clock, Menu, X } from 'lucide-react'
+import { Phone, MapPin, Clock, Menu, X, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -77,6 +77,16 @@ export default function Header() {
                 >
                   Blog
                 </Link>
+                <button
+                  onClick={() => {
+                    const chatButton = document.querySelector('[data-chat-button]') as HTMLButtonElement
+                    if (chatButton) chatButton.click()
+                  }}
+                  className="font-semibold transition-all duration-300 px-6 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 flex items-center"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Chat
+                </button>
               </nav>
               
               <ThemeToggle />
@@ -125,6 +135,17 @@ export default function Header() {
                 >
                   Blog
                 </Link>
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    const chatButton = document.querySelector('[data-chat-button]') as HTMLButtonElement
+                    if (chatButton) chatButton.click()
+                  }}
+                  className="font-semibold transition-all duration-300 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 flex items-center"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Chat
+                </button>
               </div>
             </motion.div>
           )}
