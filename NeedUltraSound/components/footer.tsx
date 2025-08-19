@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Phone, MapPin, Mail, Clock } from 'lucide-react'
+import { Phone, MapPin, Clock } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -23,7 +23,6 @@ export default function Footer() {
               No insurance required.
             </p>
             <div className="space-y-2">
-              <p className="text-medical-100"><span className="font-medium">License:</span> #L12345678</p>
               <p className="text-medical-100"><span className="font-medium">Established:</span> 2010</p>
               <p className="text-medical-100">
                 <span className="font-medium">Hours:</span> Mon-Fri 9AM-5PM, Sat 9AM-2PM
@@ -46,12 +45,6 @@ export default function Footer() {
                   <Phone className="h-5 w-5 text-medical-400 flex-shrink-0" />
                   <a href="tel:623-846-7597" className="text-medical-100 hover:text-white transition-colors">
                     623-846-7597
-                  </a>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <Mail className="h-5 w-5 text-medical-400 mt-0.5 flex-shrink-0" />
-                  <a href="mailto:info@needultrasoundtoday.com" className="text-medical-100 hover:text-white transition-colors">
-                    info@needultrasoundtoday.com
                   </a>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -97,6 +90,7 @@ export default function Footer() {
         >
           <p>&copy; {new Date().getFullYear()} NeedUltrasoundToday. All rights reserved.</p>
           <div className="mt-2">
+            <p className="text-medical-200 text-sm mb-2">4700 North 51st Avenue, Phoenix, Arizona 85031</p>
             <a 
               href="https://www.google.com/maps/dir//4700+N+51st+Ave+%235,+Phoenix,+AZ+85031,+USA/@33.5057968,-112.2515968,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x872b14c987eaaaab:0xaf123434c4d15982!2m2!1d-112.1691956!2d33.5058241?entry=ttu"
               target="_blank"
