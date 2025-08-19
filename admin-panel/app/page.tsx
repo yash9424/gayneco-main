@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/components/theme-provider'
 import { useToast, ToastComponent } from '@/components/ui/toast'
-import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload, Edit, Trash2, Send } from 'lucide-react'
+import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload, Edit, Trash2, Send, Bell } from 'lucide-react'
 
 const PROJECTS = [
   { name: 'AHCCCSHelp', port: 3001, color: 'bg-blue-500' },
@@ -35,6 +35,13 @@ export default function AdminPanel() {
   const [blogs, setBlogs] = useState([])
   const [chats, setChats] = useState([])
   const [activeTab, setActiveTab] = useState('overview')
+
+  useEffect(() => {
+    const savedTab = localStorage.getItem('adminActiveTab')
+    if (savedTab) {
+      setActiveTab(savedTab)
+    }
+  }, [])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [blogFormOpen, setBlogFormOpen] = useState(false)
@@ -51,6 +58,42 @@ export default function AdminPanel() {
     selectedSites: [] as string[]
   })
   const [editingBlog, setEditingBlog] = useState<any>(null)
+  
+  const handleBlogSubmit = async () => {
+    try {
+      const formData = new FormData()
+      formData.append('title', blogForm.title)
+      formData.append('excerpt', blogForm.excerpt)
+      formData.append('content', blogForm.description)
+      formData.append('projects', JSON.stringify(blogForm.selectedSites))
+      
+      if (editingBlog) {
+        formData.append('id', editingBlog._id)
+      }
+      
+      if (blogForm.image) {
+        formData.append('image', blogForm.image)
+      }
+      
+      const response = await fetch('/api/blogs', {
+        method: editingBlog ? 'PUT' : 'POST',
+        body: formData
+      })
+      
+      if (response.ok) {
+        success(`Blog ${editingBlog ? 'updated' : 'created'} successfully`)
+        setBlogFormOpen(false)
+        setEditingBlog(null)
+        setBlogForm({ title: '', excerpt: '', description: '', image: null, selectedSites: [] })
+        setImagePreview(null)
+        fetch('/api/blogs').then(r => r.json()).then(setBlogs)
+      } else {
+        error(`Failed to ${editingBlog ? 'update' : 'create'} blog`)
+      }
+    } catch (err) {
+      error(`Failed to ${editingBlog ? 'update' : 'create'} blog`)
+    }
+  }
   const [viewingBlog, setViewingBlog] = useState<any>(null)
   const [viewingChat, setViewingChat] = useState<any>(null)
   const [chatMessages, setChatMessages] = useState([])
@@ -184,6 +227,7 @@ export default function AdminPanel() {
               key={tab.id}
               onClick={() => {
                 setActiveTab(tab.id)
+                localStorage.setItem('adminActiveTab', tab.id)
                 setSidebarOpen(false)
               }}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-left ${
@@ -324,6 +368,67 @@ export default function AdminPanel() {
               </div>
             )}
 
+            {activeTab === 'blogs' && (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Blog Management</h2>
+                  <Button 
+                    onClick={() => setBlogFormOpen(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Blog
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {blogs.map((blog: any) => (
+                    <div key={blog._id} className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{blog.title}</h3>
+                        <div className="flex space-x-2">
+                          <Button size="sm" variant="ghost" onClick={() => setViewingBlog(blog)}>
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => { setEditingBlog(blog); setBlogForm({ title: blog.title, excerpt: blog.excerpt, description: blog.content, image: null, selectedSites: blog.projects || [] }); setBlogFormOpen(true); }}>
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            onClick={async () => {
+                              if (confirm('Delete this blog?')) {
+                                try {
+                                  const response = await fetch(`/api/blogs?id=${blog._id}`, { method: 'DELETE' })
+                                  if (response.ok) {
+                                    success('Blog deleted successfully')
+                                    fetch('/api/blogs').then(r => r.json()).then(setBlogs)
+                                  }
+                                } catch (err) {
+                                  error('Failed to delete blog')
+                                }
+                              }
+                            }}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">{blog.excerpt}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {blog.projects?.map((project: string) => (
+                          <span key={project} className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded">
+                            {project}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {activeTab === 'chats' && (
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
@@ -352,7 +457,7 @@ export default function AdminPanel() {
                           <div className="flex items-center justify-between mb-4">
                             <div className={`w-3 h-3 rounded-full ${project.color}`}></div>
                             {siteChats.length > 0 && (
-                              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                              <span className="bg-red-500 text-white text-sm font-bold px-3 py-1.5 rounded-full min-w-[24px] h-6 flex items-center justify-center">
                                 {siteChats.length}
                               </span>
                             )}
@@ -361,7 +466,7 @@ export default function AdminPanel() {
                             {project.name}
                           </h3>
                           <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                            <MessageSquare className="w-4 h-4" />
+                            <Bell className="w-4 h-4" />
                             <span>{siteChats.length} conversations</span>
                           </div>
                           <div className="mt-3 text-xs text-gray-400">
@@ -446,7 +551,7 @@ export default function AdminPanel() {
       {/* Chat Modal */}
       {viewingChat && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-2xl h-[600px] flex flex-col border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{viewingChat.userInfo?.name}</h3>
@@ -457,7 +562,7 @@ export default function AdminPanel() {
               </Button>
             </div>
             
-            <div className="flex-1 p-4 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+            <div className="flex-1 p-4 overflow-y-auto bg-gray-50 dark:bg-gray-900" style={{ maxHeight: '400px' }}>
               {chatMessages.map((msg: any) => (
                 <div key={msg._id} className={`mb-3 ${msg.isAdmin ? 'text-right' : 'text-left'}`}>
                   <div className={`inline-block p-3 rounded-lg max-w-xs ${
@@ -487,6 +592,158 @@ export default function AdminPanel() {
                 <Button onClick={handleSendAdminMessage} className="bg-blue-600 hover:bg-blue-700 text-white">
                   Send
                 </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Blog Form Modal */}
+      {blogFormOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {editingBlog ? 'Edit Blog' : 'Create New Blog'}
+              </h3>
+              <Button variant="ghost" size="sm" onClick={() => { setBlogFormOpen(false); setEditingBlog(null); setBlogForm({ title: '', excerpt: '', description: '', image: null, selectedSites: [] }); setImagePreview(null); }}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Title</label>
+                <input
+                  type="text"
+                  value={blogForm.title}
+                  onChange={(e) => setBlogForm({...blogForm, title: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Blog title"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Excerpt</label>
+                <textarea
+                  value={blogForm.excerpt}
+                  onChange={(e) => setBlogForm({...blogForm, excerpt: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  rows={3}
+                  placeholder="Short description"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Content</label>
+                <textarea
+                  value={blogForm.description}
+                  onChange={(e) => setBlogForm({...blogForm, description: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  rows={8}
+                  placeholder="Blog content"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      setBlogForm({...blogForm, image: file})
+                      const reader = new FileReader()
+                      reader.onload = (e) => setImagePreview(e.target?.result as string)
+                      reader.readAsDataURL(file)
+                    }
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                {(imagePreview || editingBlog?.image) && (
+                  <div className="mt-2">
+                    <img 
+                      src={imagePreview || `data:image/jpeg;base64,${editingBlog?.image}`} 
+                      alt="Preview" 
+                      className="w-32 h-32 object-cover rounded-lg border"
+                    />
+                  </div>
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Sites</label>
+                <div className="grid grid-cols-1 gap-3">
+                  {BLOG_SITES.map((site) => (
+                    <label key={site.name} className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={blogForm.selectedSites.includes(site.name)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setBlogForm({...blogForm, selectedSites: [...blogForm.selectedSites, site.name]})
+                          } else {
+                            setBlogForm({...blogForm, selectedSites: blogForm.selectedSites.filter(s => s !== site.name)})
+                          }
+                        }}
+                        className="w-4 h-4 rounded"
+                      />
+                      <span className="text-base font-medium text-gray-700 dark:text-gray-300">{site.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-2 pt-4">
+                <Button variant="ghost" onClick={() => { setBlogFormOpen(false); setEditingBlog(null); setBlogForm({ title: '', excerpt: '', description: '', image: null, selectedSites: [] }); setImagePreview(null); }}>
+                  Cancel
+                </Button>
+                <Button onClick={handleBlogSubmit}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  {editingBlog ? 'Update' : 'Create'} Blog
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Blog View Modal */}
+      {viewingBlog && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{viewingBlog.title}</h3>
+              <Button variant="ghost" size="sm" onClick={() => setViewingBlog(null)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            
+            <div className="p-6">
+              {viewingBlog.image && (
+                <div className="mb-4">
+                  <img 
+                    src={`data:image/jpeg;base64,${viewingBlog.image}`} 
+                    alt={viewingBlog.title} 
+                    className="w-full max-w-md h-48 object-cover rounded-lg border"
+                  />
+                </div>
+              )}
+              <p className="text-gray-600 dark:text-gray-400 mb-4">{viewingBlog.excerpt}</p>
+              <div className="prose dark:prose-invert max-w-none">
+                <p className="whitespace-pre-wrap">{viewingBlog.content}</p>
+              </div>
+              <div className="mt-6">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Published on:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {viewingBlog.projects?.map((project: string) => (
+                    <span key={project} className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded">
+                      {project}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

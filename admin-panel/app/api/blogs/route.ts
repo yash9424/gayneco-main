@@ -35,3 +35,36 @@ export async function GET() {
   const blogs = await db.collection('blogs').find({}).sort({ createdAt: -1 }).toArray()
   return Response.json(blogs)
 }
+
+export async function PUT(request: NextRequest) {
+  const formData = await request.formData()
+  const id = formData.get('id') as string
+  const title = formData.get('title') as string
+  const excerpt = formData.get('excerpt') as string
+  const content = formData.get('content') as string
+  const projectsString = formData.get('projects') as string
+  const projects = JSON.parse(projectsString || '[]')
+  
+  const updateData = {
+    title,
+    excerpt,
+    content,
+    projects,
+    updatedAt: new Date()
+  }
+
+  await db.collection('blogs').updateOne({ _id: new (await import('mongodb')).ObjectId(id) }, { $set: updateData })
+  return Response.json({ success: true })
+}
+
+export async function DELETE(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const id = searchParams.get('id')
+  
+  if (!id) {
+    return Response.json({ error: 'ID required' }, { status: 400 })
+  }
+  
+  await db.collection('blogs').deleteOne({ _id: new (await import('mongodb')).ObjectId(id) })
+  return Response.json({ success: true })
+}

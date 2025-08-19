@@ -104,7 +104,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
           console.log('Chat button clicked!')
           setIsChatOpen(true)
         }}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110"
         style={{ zIndex: 9999 }}
       >
         <MessageCircle className="w-7 h-7" />
@@ -113,7 +113,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
       {isChatOpen && (
         <div className="fixed bottom-20 right-6 z-50">
           <div className="bg-white rounded-xl shadow-2xl w-96 h-[500px] flex flex-col border">
-            <div className="flex items-center justify-between p-4 bg-green-600 text-white rounded-t-xl">
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-xl">
               <h3 className="font-bold">Chat with Us</h3>
               <button
                 onClick={() => {
@@ -137,7 +137,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="text"
                       value={userInfo.name}
                       onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Your name"
                     />
                   </div>
@@ -147,7 +147,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="number"
                       value={userInfo.age}
                       onChange={(e) => setUserInfo({...userInfo, age: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Your age"
                     />
                   </div>
@@ -157,14 +157,14 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="text"
                       value={userInfo.contact}
                       onChange={(e) => setUserInfo({...userInfo, contact: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Phone or email"
                     />
                   </div>
                   <button
                     onClick={startChat}
                     disabled={!userInfo.name || !userInfo.age || !userInfo.contact}
-                    className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Start Chat
                   </button>
@@ -178,7 +178,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       <div className={`inline-block p-3 rounded-lg shadow-sm max-w-xs ${
                         msg.isAdmin 
                           ? 'bg-white text-gray-700 border' 
-                          : 'bg-green-600 text-white'
+                          : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
                       }`}>
                         <p className="text-sm">{msg.message}</p>
                         <p className="text-xs mt-1 opacity-70">
@@ -188,7 +188,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                     </div>
                   ))}
                 </div>
-                <div className="p-4 bg-green-600 rounded-b-xl">
+                <div className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-b-xl">
                   <div className="flex space-x-2">
                     <input
                       type="text"
@@ -196,11 +196,11 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       onChange={(e) => setCurrentMessage(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Type your message..."
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white placeholder-gray-500"
                     />
                     <button 
                       onClick={sendMessage}
-                      className="px-3 py-2 bg-white text-green-600 rounded-lg hover:bg-gray-100"
+                      className="px-3 py-2 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
                     >
                       <Send className="w-4 h-4" />
                     </button>

@@ -96,7 +96,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     <>
       <button
         onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-teal-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
       >
         <MessageCircle className="w-7 h-7" />
       </button>
@@ -104,7 +104,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
       {isChatOpen && (
         <div className="fixed bottom-20 right-6 z-50">
           <div className="bg-white rounded-xl shadow-2xl w-96 h-[500px] flex flex-col border">
-            <div className="flex items-center justify-between p-4 bg-teal-600 text-white rounded-t-xl">
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-teal-600 to-blue-600 text-white rounded-t-xl">
               <h3 className="font-bold">Chat with Us</h3>
               <button
                 onClick={() => {
@@ -155,7 +155,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                   <button
                     onClick={startChat}
                     disabled={!userInfo.name || !userInfo.age || !userInfo.contact}
-                    className="w-full py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-2 bg-gradient-to-r from-teal-600 to-blue-600 text-white rounded-lg hover:from-teal-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Start Chat
                   </button>
@@ -169,7 +169,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       <div className={`inline-block p-3 rounded-lg shadow-sm max-w-xs ${
                         msg.isAdmin 
                           ? 'bg-white text-gray-700 border' 
-                          : 'bg-teal-600 text-white'
+                          : 'bg-gradient-to-r from-teal-600 to-blue-600 text-white'
                       }`}>
                         <p className="text-sm">{msg.message}</p>
                         <p className="text-xs mt-1 opacity-70">
@@ -179,7 +179,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                     </div>
                   ))}
                 </div>
-                <div className="p-4 bg-teal-600 rounded-b-xl">
+                <div className="p-4 bg-gradient-to-r from-teal-600 to-blue-600 rounded-b-xl">
                   <div className="flex space-x-2">
                     <input
                       type="text"
