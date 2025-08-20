@@ -32,8 +32,8 @@ const BLOG_SITES = [
 ]
 
 export default function AdminPanel() {
-  const [blogs, setBlogs] = useState([])
-  const [chats, setChats] = useState([])
+  const [blogs, setBlogs] = useState<any[]>([])
+  const [chats, setChats] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState('overview')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -53,7 +53,7 @@ export default function AdminPanel() {
   const [editingBlog, setEditingBlog] = useState<any>(null)
   const [viewingBlog, setViewingBlog] = useState<any>(null)
   const [viewingChat, setViewingChat] = useState<any>(null)
-  const [chatMessages, setChatMessages] = useState([])
+  const [chatMessages, setChatMessages] = useState<any[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [selectedSite, setSelectedSite] = useState('')
   
