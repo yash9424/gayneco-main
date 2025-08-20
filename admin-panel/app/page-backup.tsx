@@ -537,7 +537,8 @@ export default function AdminPanel() {
                           <p>Age: {conversation.userInfo?.age} | Contact: {conversation.userInfo?.contact}</p>
                         </div>
                       </div>
-                    ))
+                    ))}
+                  </div>
                   </div>
                 </div>
               )}
