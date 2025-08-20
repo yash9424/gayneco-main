@@ -1,9 +1,10 @@
 import { NextRequest } from 'next/server'
-import { db } from '../../../../lib/mongodb'
+import { getDb } from '../../../../lib/mongodb'
 import { ObjectId } from 'mongodb'
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    const db = await getDb()
     const blog = await db.collection('blogs').findOne({ _id: new ObjectId(params.id) })
     if (!blog) {
       return Response.json({ error: 'Blog not found' }, { status: 404 })
@@ -16,6 +17,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    const db = await getDb()
     const formData = await request.formData()
     const title = formData.get('title') as string
     const excerpt = formData.get('excerpt') as string
@@ -54,6 +56,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    const db = await getDb()
     const result = await db.collection('blogs').deleteOne({ _id: new ObjectId(params.id) })
     
     if (result.deletedCount === 0) {

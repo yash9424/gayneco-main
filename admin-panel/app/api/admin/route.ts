@@ -1,13 +1,15 @@
 import { NextRequest } from 'next/server'
-import { db } from '../../../lib/mongodb'
+import { getDb } from '../../../lib/mongodb'
 import bcrypt from 'bcryptjs'
 
 export async function GET() {
+  const db = await getDb()
   const admin = await db.collection('admins').findOne({})
   return Response.json({ email: admin?.email || 'Not found' })
 }
 
 export async function PUT(request: NextRequest) {
+  const db = await getDb()
   const { currentPassword, newEmail, newPassword } = await request.json()
   
   const admin = await db.collection('admins').findOne({})

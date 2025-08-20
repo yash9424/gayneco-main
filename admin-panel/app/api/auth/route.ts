@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { db } from '../../../lib/mongodb'
+import { getDb } from '../../../lib/mongodb'
 import bcrypt from 'bcryptjs'
 
 export async function POST(request: NextRequest) {

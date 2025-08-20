@@ -91,6 +91,6 @@ export async function GET(request: NextRequest) {
     return response
   } catch (error) {
     console.error('Analytics API error:', error)
-    return Response.json({ error: error.message }, { status: 500 })
+    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }

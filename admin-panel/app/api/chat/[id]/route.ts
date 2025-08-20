@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
-import { db, client } from '../../../../lib/mongodb'
+import { getDb } from '../../../../lib/mongodb'
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    await client.connect()
+    const db = await getDb()
     
     const messages = await db.collection('chats')
       .find({ chatId: params.id })
@@ -12,13 +12,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     
     return Response.json({ messages })
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 })
+    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    await client.connect()
+    const db = await getDb()
     
     const { message, isAdmin } = await request.json()
     
@@ -33,6 +33,6 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     
     return Response.json({ success: true })
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 })
+    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }

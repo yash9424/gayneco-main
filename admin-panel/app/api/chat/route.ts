@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     return response
   } catch (error) {
     console.error('Chat API error:', error)
-    const response = Response.json({ success: false, error: error.message }, { status: 500 })
+    const response = Response.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
     response.headers.set('Access-Control-Allow-Origin', '*')
     return response
   }
@@ -108,7 +108,7 @@ export async function GET(request: NextRequest) {
     return response
   } catch (error) {
     console.error('Chat GET API error:', error)
-    const response = Response.json({ error: error.message }, { status: 500 })
+    const response = Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
     response.headers.set('Access-Control-Allow-Origin', '*')
     return response
   }
@@ -133,7 +133,7 @@ export async function DELETE(request: NextRequest) {
     return response
   } catch (error) {
     console.error('Chat DELETE API error:', error)
-    const response = Response.json({ error: error.message }, { status: 500 })
+    const response = Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
     response.headers.set('Access-Control-Allow-Origin', '*')
     return response
   }
