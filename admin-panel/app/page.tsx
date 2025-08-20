@@ -484,11 +484,12 @@ export default function AdminPanel() {
                       <h3 className="font-semibold text-gray-900 dark:text-white">{project.name}</h3>
                     </div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Port: {project.port}</p>
-                    <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                      <a href={`http://localhost:${project.port}`} target="_blank">
-                        <Globe className="w-4 h-4 mr-2" />
-                        View Site
-                      </a>
+                    <Button 
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      onClick={() => window.open(`http://localhost:${project.port}`, '_blank')}
+                    >
+                      <Globe className="w-4 h-4 mr-2" />
+                      View Site
                     </Button>
                   </div>
                 ))}
