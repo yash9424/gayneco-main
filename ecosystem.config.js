@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'gayneco-admin',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/admin-panel',
       env: {
@@ -12,7 +12,7 @@ module.exports = {
     },
     {
       name: 'ahcccs-help',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/AHCCCSHelp',
       env: {
@@ -22,7 +22,7 @@ module.exports = {
     },
     {
       name: 'first-trimester',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/First-Trimester',
       env: {
@@ -32,7 +32,7 @@ module.exports = {
     },
     {
       name: 'free-pregnancy-test',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/FreePregnencyTest',
       env: {
@@ -42,7 +42,7 @@ module.exports = {
     },
     {
       name: 'low-cost-pregnancy',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/Low-cost-pregnancy',
       env: {
@@ -52,7 +52,7 @@ module.exports = {
     },
     {
       name: 'need-ultrasound',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/NeedUltraSound',
       env: {
@@ -62,7 +62,7 @@ module.exports = {
     },
     {
       name: 'pregnancy-test',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/Pregnancy-Test',
       env: {
@@ -72,7 +72,7 @@ module.exports = {
     },
     {
       name: 'same-day-ultrasound',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/SameDayUltraSound',
       env: {
@@ -82,7 +82,7 @@ module.exports = {
     },
     {
       name: 'teen-pregnancy-support',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/Teen-Pregnancy-Support',
       env: {
@@ -92,7 +92,7 @@ module.exports = {
     },
     {
       name: 'walk-in-pregnancy',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/WalkIn-Pregnancy',
       env: {
@@ -102,7 +102,7 @@ module.exports = {
     },
     {
       name: 'wic-pregnancy-help',
-      script: 'npm',
+      script: 'pnpm',
       args: 'start',
       cwd: '/var/www/gayneco/Wic-Pregnancy-help',
       env: {
