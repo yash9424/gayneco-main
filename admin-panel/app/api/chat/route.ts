@@ -1,11 +1,10 @@
 import { NextRequest } from 'next/server'
-import { db, client } from '../../../lib/mongodb'
+import { getDb } from '../../../lib/mongodb'
 import { ObjectId } from 'mongodb'
 
 export async function POST(request: NextRequest) {
   try {
-    await client.connect()
-    
+    const db = await getDb()
     const { message, project, userInfo, isAdmin, chatId } = await request.json()
     
     let finalChatId = chatId
@@ -54,8 +53,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    await client.connect()
-    
+    const db = await getDb()
     const { searchParams } = new URL(request.url)
     const chatId = searchParams.get('chatId')
     const name = searchParams.get('name')
@@ -118,8 +116,7 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    await client.connect()
-    
+    const db = await getDb()
     const { searchParams } = new URL(request.url)
     const chatId = searchParams.get('chatId')
     

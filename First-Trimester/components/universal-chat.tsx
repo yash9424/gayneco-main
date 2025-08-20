@@ -28,7 +28,8 @@ export default function UniversalChat({ siteName }: ChatProps) {
   const startChat = async () => {
     try {
       // First check if conversation already exists
-      const checkResponse = await fetch(`http://localhost:3011/api/chat?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
+      const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
+      const checkResponse = await fetch(`${apiUrl}?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
       const checkData = await checkResponse.json()
       
       if (checkData.exists) {
@@ -39,7 +40,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
         return
       } else {
         // Start new conversation
-        const response = await fetch('http://localhost:3011/api/chat', {
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -83,7 +84,8 @@ export default function UniversalChat({ siteName }: ChatProps) {
     setMessages(prev => [...prev, newMessage])
     
     try {
-      await fetch('http://localhost:3011/api/chat', {
+      const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
+      await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -103,7 +105,8 @@ export default function UniversalChat({ siteName }: ChatProps) {
     if (conversationId) {
       const interval = setInterval(async () => {
         try {
-          const response = await fetch(`http://localhost:3011/api/chat?chatId=${conversationId}`)
+          const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
+          const response = await fetch(`${apiUrl}?chatId=${conversationId}`)
           const data = await response.json()
           setMessages(data)
         } catch (err) {

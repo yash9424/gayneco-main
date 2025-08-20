@@ -1,6 +1,10 @@
 export async function GET() {
   try {
-    const response = await fetch('http://localhost:3011/api/blogs/site/SameDayUltraSound')
+    const response = await fetch('http://72.60.30.153/api/cross-domain/blogs', {
+      headers: {
+        'Origin': 'https://samedayultrasoundaz.com'
+      }
+    })
     if (!response.ok) {
       return Response.json([])
     }

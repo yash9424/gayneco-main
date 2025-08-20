@@ -1,6 +1,10 @@
 export async function GET() {
   try {
-    const response = await fetch('http://localhost:3011/api/blogs/site/Teen-Pregnancy-Support')
+    const response = await fetch('http://72.60.30.153/api/cross-domain/blogs', {
+      headers: {
+        'Origin': 'https://teenpregnancysupportaz.com'
+      }
+    })
     if (!response.ok) {
       return Response.json([])
     }

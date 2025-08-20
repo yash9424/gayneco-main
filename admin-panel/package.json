@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start -p 3011",
     "lint": "next lint",
-    "init-admin": "node scripts/init-admin.js"
+    "init-admin": "node scripts/init-admin.js",
+    "prod": "NODE_ENV=production next start -p 3011",
+    "build:prod": "NODE_ENV=production next build"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.1.4",

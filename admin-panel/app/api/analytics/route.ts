@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
-import { db, client } from '../../../lib/mongodb'
+import { getDb } from '../../../lib/mongodb'
 
 export async function GET(request: NextRequest) {
   try {
-    await client.connect()
+    const db = await getDb()
     
     // Get chat statistics by project
     const chatStats = await db.collection('chats')

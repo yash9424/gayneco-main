@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { db } from '../../../lib/mongodb'
+import { getDb } from '../../../lib/mongodb'
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData()
@@ -27,11 +27,13 @@ export async function POST(request: NextRequest) {
     createdAt: new Date()
   }
 
+  const db = await getDb()
   await db.collection('blogs').insertOne(blogPost)
   return Response.json({ success: true })
 }
 
 export async function GET() {
+  const db = await getDb()
   const blogs = await db.collection('blogs').find({}).sort({ createdAt: -1 }).toArray()
   return Response.json(blogs)
 }
@@ -53,6 +55,7 @@ export async function PUT(request: NextRequest) {
     updatedAt: new Date()
   }
 
+  const db = await getDb()
   await db.collection('blogs').updateOne({ _id: new (await import('mongodb')).ObjectId(id) }, { $set: updateData })
   return Response.json({ success: true })
 }
@@ -65,6 +68,7 @@ export async function DELETE(request: NextRequest) {
     return Response.json({ error: 'ID required' }, { status: 400 })
   }
   
+  const db = await getDb()
   await db.collection('blogs').deleteOne({ _id: new (await import('mongodb')).ObjectId(id) })
   return Response.json({ success: true })
 }

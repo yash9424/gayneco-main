@@ -18,19 +18,17 @@ export default function UniversalChat({ siteName }: ChatProps) {
 
   const startChat = async () => {
     try {
-      // First check if conversation already exists
-      const checkResponse = await fetch(`http://localhost:3011/api/chat?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
+      const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
+      const checkResponse = await fetch(`${apiUrl}?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
       const checkData = await checkResponse.json()
       
       if (checkData.exists) {
-        // Load existing conversation
         setConversationId(checkData.chatId)
         setMessages(checkData.messages)
         setShowForm(false)
         return
       } else {
-        // Start new conversation
-        const response = await fetch('http://localhost:3011/api/chat', {
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -64,7 +62,6 @@ export default function UniversalChat({ siteName }: ChatProps) {
     const messageToSend = currentMessage
     setCurrentMessage('')
     
-    // Add message to local state immediately
     const newMessage = {
       _id: Date.now(),
       message: messageToSend,
@@ -74,7 +71,8 @@ export default function UniversalChat({ siteName }: ChatProps) {
     setMessages(prev => [...prev, newMessage])
     
     try {
-      await fetch('http://localhost:3011/api/chat', {
+      const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
+      await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -94,7 +92,8 @@ export default function UniversalChat({ siteName }: ChatProps) {
     if (conversationId) {
       const interval = setInterval(async () => {
         try {
-          const response = await fetch(`http://localhost:3011/api/chat?chatId=${conversationId}`)
+          const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
+          const response = await fetch(`${apiUrl}?chatId=${conversationId}`)
           const data = await response.json()
           setMessages(data)
         } catch (err) {
@@ -114,7 +113,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     <>
       <button
         onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-pink-600 hover:bg-pink-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
       >
         <MessageCircle className="w-7 h-7" />
       </button>
@@ -122,7 +121,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
       {isChatOpen && (
         <div className="fixed bottom-20 right-6 z-50">
           <div className="bg-white rounded-xl shadow-2xl w-96 h-[500px] flex flex-col border">
-            <div className="flex items-center justify-between p-4 bg-pink-600 text-white rounded-t-xl">
+            <div className="flex items-center justify-between p-4 bg-green-600 text-white rounded-t-xl">
               <h3 className="font-bold">Chat with Us</h3>
               <button
                 onClick={() => {
@@ -146,7 +145,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="text"
                       value={userInfo.name}
                       onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-gray-400"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Your name"
                     />
                   </div>
@@ -156,7 +155,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="number"
                       value={userInfo.age}
                       onChange={(e) => setUserInfo({...userInfo, age: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-gray-400"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Your age"
                     />
                   </div>
@@ -166,14 +165,14 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="text"
                       value={userInfo.contact}
                       onChange={(e) => setUserInfo({...userInfo, contact: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-gray-400"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Phone or email"
                     />
                   </div>
                   <button
                     onClick={startChat}
                     disabled={!userInfo.name || !userInfo.age || !userInfo.contact}
-                    className="w-full py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Start Chat
                   </button>
@@ -187,7 +186,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       <div className={`inline-block p-3 rounded-lg shadow-sm max-w-xs ${
                         msg.isAdmin 
                           ? 'bg-white text-gray-700 border' 
-                          : 'bg-pink-600 text-white'
+                          : 'bg-green-600 text-white'
                       }`}>
                         <p className="text-sm">{msg.message}</p>
                         <p className="text-xs mt-1 opacity-70">
@@ -198,7 +197,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                   ))}
                   <div ref={messagesEndRef} />
                 </div>
-                <div className="p-4 bg-pink-600 rounded-b-xl">
+                <div className="p-4 bg-green-600 rounded-b-xl">
                   <div className="flex space-x-2">
                     <input
                       type="text"
@@ -206,11 +205,11 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       onChange={(e) => setCurrentMessage(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Type your message..."
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white placeholder-gray-400"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
                     />
                     <button 
                       onClick={sendMessage}
-                      className="px-3 py-2 bg-white text-pink-600 rounded-lg hover:bg-gray-100"
+                      className="px-3 py-2 bg-white text-green-600 rounded-lg hover:bg-gray-100"
                     >
                       <Send className="w-4 h-4" />
                     </button>

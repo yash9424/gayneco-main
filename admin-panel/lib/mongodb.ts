@@ -1,14 +1,33 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient, Db } from 'mongodb'
+
+const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017'
+const options = {
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+}
 
 let client: MongoClient
-let db: any
+let clientPromise: Promise<MongoClient>
 
-if (!client) {
-  client = new MongoClient('mongodb://localhost:27017')
+if (process.env.NODE_ENV === 'development') {
+  let globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>
+  }
+
+  if (!globalWithMongo._mongoClientPromise) {
+    client = new MongoClient(uri, options)
+    globalWithMongo._mongoClientPromise = client.connect()
+  }
+  clientPromise = globalWithMongo._mongoClientPromise
+} else {
+  client = new MongoClient(uri, options)
+  clientPromise = client.connect()
 }
 
-if (!db) {
-  db = client.db('gynecologist')
+export async function getDb(): Promise<Db> {
+  const client = await clientPromise
+  return client.db('gynecologist')
 }
 
-export { db, client }
+export { clientPromise as client }

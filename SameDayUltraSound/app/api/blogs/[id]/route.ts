@@ -2,7 +2,11 @@ import { NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const response = await fetch(`http://localhost:3011/api/blogs/${params.id}`)
+    const response = await fetch(`http://72.60.30.153/api/blogs/${params.id}`, {
+      headers: {
+        'Origin': 'https://samedayultrasoundaz.com'
+      }
+    })
     if (!response.ok) {
       return Response.json({ error: 'Blog not found' }, { status: 404 })
     }
