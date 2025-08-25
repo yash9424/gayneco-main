@@ -86,9 +86,9 @@ export default function HomePage() {
           />
         </motion.div>
 
-        <div className="relative z-20 container mx-auto px-4 py-20">
+        <div className="relative z-20 container mx-auto px-4 py-12 sm:py-16 lg:py-20">
           <motion.div 
-            className="grid lg:grid-cols-12 gap-12 items-center min-h-[80vh]"
+            className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center min-h-[70vh] sm:min-h-[80vh]"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -240,89 +240,25 @@ export default function HomePage() {
             {/* Right Content - Doctor Image */}
             <motion.div
               variants={itemVariants}
-              className="lg:col-span-5 relative"
+              className="lg:col-span-5 relative mt-8 lg:mt-0"
             >
-              <div className="relative">
+              <div className="relative max-w-md mx-auto lg:max-w-none">
                 {/* Main Doctor Image */}
                 <motion.div 
-                  className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border-4 border-white dark:border-gray-700"
-                  whileHover={{ scale: 1.02, rotateY: 5 }}
+                  className="relative bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden border-2 sm:border-4 border-white dark:border-gray-700"
+                  whileHover={{ scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
                   <img
                     src="/images/female-doctor.png"
                     alt="Professional female doctor"
-                    className="w-full h-[400px] sm:h-[500px] lg:h-[600px] object-cover"
+                    className="w-full h-[350px] sm:h-[450px] lg:h-[550px] object-cover"
+                    loading="eager"
                   />
-                  
-                  {/* Gradient overlay for better card visibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
                 </motion.div>
                 
-                {/* Floating Info Cards */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1.0 }}
-                  whileHover={{ scale: 1.05, rotate: 2 }}
-                  className="absolute -top-4 -left-4 sm:-top-6 sm:-left-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-xl p-3 sm:p-6 border border-gray-100 dark:border-gray-700 hidden sm:block"
-                >
-                  <div className="flex items-center space-x-3">
-                    <motion.div 
-                      className="w-12 h-12 bg-teal-100 dark:bg-teal-900/50 rounded-xl flex items-center justify-center"
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      <Clock className="w-6 h-6 text-teal-600 dark:text-teal-400" />
-                    </motion.div>
-                    <div>
-                      <div className="font-bold text-gray-900 dark:text-white text-lg">Same Day</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Service Available</div>
-                    </div>
-                  </div>
-                </motion.div>
-                
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: -20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1.2 }}
-                  whileHover={{ scale: 1.05, rotate: -2 }}
-                  className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-xl p-3 sm:p-6 border border-gray-100 dark:border-gray-700 hidden sm:block"
-                >
-                  <div className="flex items-center space-x-3">
-                    <motion.div 
-                      className="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-xl flex items-center justify-center"
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      <Award className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                    </motion.div>
-                    <div>
-                      <div className="font-bold text-gray-900 dark:text-white text-lg">5.0 Rating</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">500+ Reviews</div>
-                    </div>
-                  </div>
-                </motion.div>
 
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 1.4 }}
-                  whileHover={{ scale: 1.1, rotate: 360 }}
-                  className="absolute top-1/2 -right-6 sm:-right-8 transform -translate-y-1/2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-xl p-3 sm:p-4 border border-gray-100 dark:border-gray-700 hidden sm:block"
-                >
-                  <Users className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-                </motion.div>
 
-                {/* Decorative Elements */}
-                <motion.div 
-                  className="absolute -z-10 top-10 right-10 w-32 h-32 bg-teal-200/40 dark:bg-teal-400/20 rounded-full blur-2xl"
-                  animate={floatingAnimation}
-                />
-                <motion.div 
-                  className="absolute -z-10 bottom-10 left-10 w-24 h-24 bg-orange-200/40 dark:bg-orange-400/20 rounded-full blur-2xl"
-                  animate={{ ...floatingAnimation, transition: { ...floatingAnimation.transition, delay: 1 } }}
-                />
               </div>
             </motion.div>
           </motion.div>
@@ -333,17 +269,17 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.6 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+          className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20 hidden sm:block"
         >
           <div className="flex flex-col items-center space-y-2 text-gray-700 dark:text-gray-300">
-            <span className="text-sm font-medium">Scroll to learn more</span>
+            <span className="text-xs sm:text-sm font-medium">Scroll to learn more</span>
             <motion.div 
-              className="w-6 h-10 border-2 border-gray-500 dark:border-gray-400 rounded-full flex justify-center"
+              className="w-5 h-8 sm:w-6 sm:h-10 border-2 border-gray-500 dark:border-gray-400 rounded-full flex justify-center"
               whileHover={{ scale: 1.1 }}
             >
               <motion.div 
-                className="w-1 h-3 bg-gray-500 dark:bg-gray-400 rounded-full mt-2"
-                animate={{ y: [0, 10, 0] }}
+                className="w-1 h-2 sm:h-3 bg-gray-500 dark:bg-gray-400 rounded-full mt-2"
+                animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
             </motion.div>
