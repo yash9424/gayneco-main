@@ -15,7 +15,8 @@ export default function BlogPost() {
 
   useEffect(() => {
     if (params.id) {
-      fetch(`/api/blogs/${params.id}`)
+      const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://72.60.30.153';
+      fetch(`${API_BASE}/api/blogs/${params.id}`)
         .then(res => {
           if (!res.ok) throw new Error('Failed to fetch')
           return res.json()

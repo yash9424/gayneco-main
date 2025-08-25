@@ -18,9 +18,10 @@ export default function UniversalChat({ siteName }: ChatProps) {
 
   const startChat = async () => {
     try {
+      const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://72.60.30.153';
+      
       // First check if conversation already exists
-      const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
-      const checkResponse = await fetch(`${apiUrl}?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
+      const checkResponse = await fetch(`${API_BASE}/api/chat?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
       const checkData = await checkResponse.json()
       
       if (checkData.exists) {
@@ -31,7 +32,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
         return
       } else {
         // Start new conversation
-        const response = await fetch(apiUrl, {
+        const response = await fetch(`${API_BASE}/api/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -75,8 +76,9 @@ export default function UniversalChat({ siteName }: ChatProps) {
     setMessages(prev => [...prev, newMessage])
     
     try {
-      const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
-      await fetch(apiUrl, {
+      const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://72.60.30.153';
+      
+      await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -96,8 +98,8 @@ export default function UniversalChat({ siteName }: ChatProps) {
     if (conversationId) {
       const interval = setInterval(async () => {
         try {
-          const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
-          const response = await fetch(`${apiUrl}?chatId=${conversationId}`)
+          const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://72.60.30.153';
+          const response = await fetch(`${API_BASE}/api/chat?chatId=${conversationId}`)
           const data = await response.json()
           setMessages(data)
         } catch (err) {
