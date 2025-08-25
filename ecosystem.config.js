@@ -1,10 +1,10 @@
 module.exports = {
   apps: [
     {
-      name: 'gayneco-admin',
+      name: 'admin-panel',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/admin-panel',
+      cwd: '/var/www/gayneco-main/admin-panel',
       env: {
         NODE_ENV: 'production',
         PORT: 3011
@@ -14,7 +14,7 @@ module.exports = {
       name: 'ahcccs-help',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/AHCCCSHelp',
+      cwd: '/var/www/gayneco-main/AHCCCSHelp',
       env: {
         NODE_ENV: 'production',
         PORT: 3001
@@ -24,7 +24,7 @@ module.exports = {
       name: 'first-trimester',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/First-Trimester',
+      cwd: '/var/www/gayneco-main/First-Trimester',
       env: {
         NODE_ENV: 'production',
         PORT: 3002
@@ -34,7 +34,7 @@ module.exports = {
       name: 'free-pregnancy-test',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/FreePregnencyTest',
+      cwd: '/var/www/gayneco-main/FreePregnencyTest',
       env: {
         NODE_ENV: 'production',
         PORT: 3003
@@ -44,7 +44,7 @@ module.exports = {
       name: 'low-cost-pregnancy',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/Low-cost-pregnancy',
+      cwd: '/var/www/gayneco-main/Low-cost-pregnancy',
       env: {
         NODE_ENV: 'production',
         PORT: 3004
@@ -54,7 +54,7 @@ module.exports = {
       name: 'need-ultrasound',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/NeedUltraSound',
+      cwd: '/var/www/gayneco-main/NeedUltraSound',
       env: {
         NODE_ENV: 'production',
         PORT: 3005
@@ -64,7 +64,7 @@ module.exports = {
       name: 'pregnancy-test',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/Pregnancy-Test',
+      cwd: '/var/www/gayneco-main/Pregnancy-Test',
       env: {
         NODE_ENV: 'production',
         PORT: 3006
@@ -74,7 +74,7 @@ module.exports = {
       name: 'same-day-ultrasound',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/SameDayUltraSound',
+      cwd: '/var/www/gayneco-main/SameDayUltraSound',
       env: {
         NODE_ENV: 'production',
         PORT: 3007
@@ -84,17 +84,17 @@ module.exports = {
       name: 'teen-pregnancy-support',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/Teen-Pregnancy-Support',
+      cwd: '/var/www/gayneco-main/Teen-Pregnancy-Support',
       env: {
         NODE_ENV: 'production',
         PORT: 3008
       }
     },
     {
-      name: 'walk-in-pregnancy',
+      name: 'walkin-pregnancy',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/WalkIn-Pregnancy',
+      cwd: '/var/www/gayneco-main/WalkIn-Pregnancy',
       env: {
         NODE_ENV: 'production',
         PORT: 3009
@@ -104,7 +104,7 @@ module.exports = {
       name: 'wic-pregnancy-help',
       script: 'pnpm',
       args: 'start',
-      cwd: '/var/www/gayneco/Wic-Pregnancy-help',
+      cwd: '/var/www/gayneco-main/Wic-Pregnancy-help',
       env: {
         NODE_ENV: 'production',
         PORT: 3010
