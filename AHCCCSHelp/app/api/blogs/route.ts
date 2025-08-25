@@ -9,7 +9,11 @@ export async function GET() {
       return Response.json([])
     }
     const data = await response.json()
-    return Response.json(data)
+    // Filter blogs for this specific project
+    const filteredBlogs = data.filter(blog => 
+      blog.projects && blog.projects.includes('AHCCCSHelp')
+    )
+    return Response.json(filteredBlogs)
   } catch (error) {
     return Response.json([])
   }
