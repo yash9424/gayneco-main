@@ -223,7 +223,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       }`}>
                         <p className="text-xs sm:text-sm">{msg.message}</p>
                         <p className="text-xs mt-1 opacity-70">
-                          {new Date(msg.timestamp).toLocaleTimeString()}
+                          {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : ''}
                         </p>
                       </div>
                     </div>
