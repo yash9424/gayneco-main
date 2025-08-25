@@ -12,7 +12,7 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('https://binzo.fun/api/blogs')
+    fetch('/api/blogs')
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch')
         return res.json()
