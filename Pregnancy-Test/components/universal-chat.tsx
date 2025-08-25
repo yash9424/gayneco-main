@@ -146,16 +146,16 @@ export default function UniversalChat({ siteName }: ChatProps) {
       <button
         data-chat-button
         onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16 bg-teal-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
+        className="fixed bottom-4 right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-teal-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex items-center justify-center z-40 transition-all duration-300 transform hover:scale-110"
       >
-        <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" />
+        <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
       </button>
 
       {isChatOpen && (
-        <div className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 p-4 sm:p-0">
-          <div className="bg-white rounded-xl shadow-2xl w-full h-full sm:w-96 sm:h-[500px] flex flex-col border max-w-md mx-auto sm:mx-0">
-            <div className="flex items-center justify-between p-4 bg-teal-600 text-white rounded-t-xl">
-              <h3 className="font-bold">Chat with Us</h3>
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-4 z-50 p-0 sm:p-0">
+          <div className="bg-white rounded-none sm:rounded-xl shadow-2xl w-full h-full sm:w-80 md:w-96 sm:h-[500px] flex flex-col border-0 sm:border">
+            <div className="flex items-center justify-between p-3 sm:p-4 bg-teal-600 text-white rounded-t-none sm:rounded-t-xl">
+              <h3 className="font-bold text-sm sm:text-base">Chat with Us</h3>
               <button
                 onClick={() => {
                   setIsChatOpen(false)
@@ -170,42 +170,42 @@ export default function UniversalChat({ siteName }: ChatProps) {
             </div>
             
             {showForm ? (
-              <div className="flex-1 p-4">
-                <div className="space-y-4">
+              <div className="flex-1 p-3 sm:p-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Name</label>
                     <input
                       type="text"
                       value={userInfo.name}
                       onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className="w-full px-2 sm:px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                       placeholder="Your name"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Age</label>
                     <input
                       type="number"
                       value={userInfo.age}
                       onChange={(e) => setUserInfo({...userInfo, age: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className="w-full px-2 sm:px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                       placeholder="Your age"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Contact</label>
                     <input
                       type="text"
                       value={userInfo.contact}
                       onChange={(e) => setUserInfo({...userInfo, contact: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className="w-full px-2 sm:px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                       placeholder="Phone or email"
                     />
                   </div>
                   <button
                     onClick={startChat}
                     disabled={!userInfo.name || !userInfo.age || !userInfo.contact}
-                    className="w-full py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-2 sm:py-3 text-sm sm:text-base bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                   >
                     Start Chat
                   </button>
@@ -213,15 +213,15 @@ export default function UniversalChat({ siteName }: ChatProps) {
               </div>
             ) : (
               <>
-                <div className="flex-1 p-4 bg-gray-50 overflow-y-auto">
+                <div className="flex-1 p-2 sm:p-4 bg-gray-50 overflow-y-auto">
                   {messages.map((msg) => (
-                    <div key={msg._id} className={`mb-3 ${msg.isAdmin ? 'text-left' : 'text-right'}`}>
-                      <div className={`inline-block p-3 rounded-lg shadow-sm max-w-[250px] sm:max-w-xs ${
+                    <div key={msg._id} className={`mb-2 sm:mb-3 ${msg.isAdmin ? 'text-left' : 'text-right'}`}>
+                      <div className={`inline-block p-2 sm:p-3 rounded-lg shadow-sm max-w-[200px] sm:max-w-[250px] md:max-w-xs ${
                         msg.isAdmin 
                           ? 'bg-white text-gray-700 border' 
                           : 'bg-teal-600 text-white'
                       }`}>
-                        <p className="text-sm">{msg.message}</p>
+                        <p className="text-xs sm:text-sm">{msg.message}</p>
                         <p className="text-xs mt-1 opacity-70">
                           {new Date(msg.timestamp).toLocaleTimeString()}
                         </p>
@@ -230,21 +230,21 @@ export default function UniversalChat({ siteName }: ChatProps) {
                   ))}
                   <div ref={messagesEndRef} />
                 </div>
-                <div className="p-4 bg-teal-600 rounded-b-xl">
-                  <div className="flex space-x-2">
+                <div className="p-2 sm:p-4 bg-teal-600 rounded-b-none sm:rounded-b-xl">
+                  <div className="flex space-x-1 sm:space-x-2">
                     <input
                       type="text"
                       value={currentMessage}
                       onChange={(e) => setCurrentMessage(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Type your message..."
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+                      className="flex-1 px-2 sm:px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
                     />
                     <button 
                       onClick={sendMessage}
-                      className="px-3 py-2 bg-white text-teal-600 rounded-lg hover:bg-gray-100"
+                      className="px-2 sm:px-3 py-2 bg-white text-teal-600 rounded-lg hover:bg-gray-100 flex-shrink-0"
                     >
-                      <Send className="w-4 h-4" />
+                      <Send className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                   </div>
                 </div>
