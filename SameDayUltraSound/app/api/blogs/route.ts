@@ -1,6 +1,6 @@
 export async function GET() {
   try {
-    const response = await fetch('https://binzo.fun/api/blogs', {
+    const response = await fetch('https://binzo.fun/api/blogs?project=SameDayUltraSound', {
       headers: {
         'Origin': 'https://samedayultrasoundaz.com'
       }
@@ -9,16 +9,7 @@ export async function GET() {
       return Response.json([])
     }
     const data = await response.json()
-    // Filter blogs for this specific project
-    console.log('All blogs:', data.map(b => ({ title: b.title, projects: b.projects })))
-    const filteredBlogs = data.filter(blog => {
-      if (!blog.projects || !Array.isArray(blog.projects)) return false
-      const matches = blog.projects.includes('SameDayUltraSound')
-      console.log(`Blog "${blog.title}" projects:`, blog.projects, 'matches SameDayUltraSound:', matches)
-      return matches
-    })
-    console.log('Filtered blogs for SameDayUltraSound:', filteredBlogs.length)
-    return Response.json(filteredBlogs)
+    return Response.json(data)
   } catch (error) {
     return Response.json([])
   }

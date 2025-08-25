@@ -33,9 +33,18 @@ export async function POST(request: NextRequest) {
   return Response.json({ success: true })
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const db = await getDb()
-  const blogs = await db.collection('blogs').find({}).sort({ createdAt: -1 }).toArray()
+  const { searchParams } = new URL(request.url)
+  const project = searchParams.get('project')
+  
+  let query = {}
+  if (project) {
+    query = { projects: { $in: [project] } }
+  }
+  
+  const blogs = await db.collection('blogs').find(query).sort({ createdAt: -1 }).toArray()
+  console.log(`Admin API: project=${project}, found ${blogs.length} blogs`)
   return Response.json(blogs)
 }
 
