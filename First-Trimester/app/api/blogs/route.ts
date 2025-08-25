@@ -1,6 +1,6 @@
 export async function GET() {
   try {
-    const response = await fetch('http://72.60.30.153/api/cross-domain/blogs', {
+    const response = await fetch('https://binzo.fun/api/blogs', {
       headers: {
         'Origin': 'https://firsttrimesterpregnancy.com'
       }

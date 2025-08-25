@@ -3,7 +3,7 @@ export async function GET(request: Request) {
   const queryString = searchParams.toString()
   
   try {
-    const response = await fetch(`http://72.60.30.153/api/chat?${queryString}`)
+    const response = await fetch(`https://binzo.fun/api/chat?${queryString}`)
     const data = await response.json()
     return Response.json(data)
   } catch (error) {
@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const response = await fetch('http://72.60.30.153/api/chat', {
+    const response = await fetch('https://binzo.fun/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
