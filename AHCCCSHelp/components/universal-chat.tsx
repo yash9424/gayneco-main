@@ -18,10 +18,8 @@ export default function UniversalChat({ siteName }: ChatProps) {
 
   const startChat = async () => {
     try {
-      const API_BASE = 'https://binzo.fun';
-      
       // First check if conversation already exists
-      const checkResponse = await fetch(`${API_BASE}/api/chat?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
+      const checkResponse = await fetch(`/api/chat?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
       const checkData = await checkResponse.json()
       
       if (checkData.exists) {
@@ -32,7 +30,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
         return
       } else {
         // Start new conversation
-        const response = await fetch(`${API_BASE}/api/chat`, {
+        const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -76,9 +74,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     setMessages(prev => [...prev, newMessage])
     
     try {
-      const API_BASE = 'https://binzo.fun';
-      
-      await fetch(`${API_BASE}/api/chat`, {
+      await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -98,8 +94,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     if (conversationId) {
       const interval = setInterval(async () => {
         try {
-          const API_BASE = 'https://binzo.fun';
-          const response = await fetch(`${API_BASE}/api/chat?chatId=${conversationId}`)
+          const response = await fetch(`/api/chat?chatId=${conversationId}`)
           const data = await response.json()
           setMessages(data)
         } catch (err) {
