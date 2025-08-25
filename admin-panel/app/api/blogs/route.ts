@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
     createdAt: new Date()
   }
 
+  console.log('Creating blog with projects:', projects)
   const db = await getDb()
   await db.collection('blogs').insertOne(blogPost)
   return Response.json({ success: true })
