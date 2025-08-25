@@ -50,7 +50,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
   const startChat = async () => {
     try {
       // First check if conversation already exists
-      const apiUrl = '/admin/api/chat'
+      const apiUrl = 'https://binzo.fun/api/chat'
       const checkResponse = await fetch(`${apiUrl}?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
       const checkData = await checkResponse.json()
       
@@ -106,7 +106,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     setMessages(prev => [...prev, newMessage])
     
     try {
-      const apiUrl = '/admin/api/chat'
+      const apiUrl = 'https://binzo.fun/api/chat'
       await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -127,7 +127,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     if (conversationId) {
       const interval = setInterval(async () => {
         try {
-          const apiUrl = '/admin/api/chat'
+          const apiUrl = 'https://binzo.fun/api/chat'
           const response = await fetch(`${apiUrl}?chatId=${conversationId}`)
           const data = await response.json()
           setMessages(data)
