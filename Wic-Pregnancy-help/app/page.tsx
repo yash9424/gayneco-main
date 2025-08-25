@@ -1,6 +1,6 @@
 'use client'
 
-import Image from "next/image"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import UniversalChat from "@/components/universal-chat"
@@ -144,11 +144,9 @@ export default function HomePage() {
                   transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 ></motion.div>
                 <div className="relative bg-white rounded-3xl p-2 shadow-xl">
-                  <Image
+                  <img
                     src="/pregnant-woman-family.png"
                     alt="Happy pregnant woman receiving support"
-                    width={400}
-                    height={400}
                     className="w-full h-auto rounded-2xl object-cover"
                   />
                 </div>
