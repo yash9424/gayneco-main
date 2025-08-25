@@ -146,14 +146,14 @@ export default function UniversalChat({ siteName }: ChatProps) {
       <button
         data-chat-button
         onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-teal-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16 bg-teal-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
       >
-        <MessageCircle className="w-7 h-7" />
+        <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" />
       </button>
 
       {isChatOpen && (
-        <div className="fixed bottom-20 right-6 z-50">
-          <div className="bg-white rounded-xl shadow-2xl w-96 h-[500px] flex flex-col border">
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 p-4 sm:p-0">
+          <div className="bg-white rounded-xl shadow-2xl w-full h-full sm:w-96 sm:h-[500px] flex flex-col border max-w-md mx-auto sm:mx-0">
             <div className="flex items-center justify-between p-4 bg-teal-600 text-white rounded-t-xl">
               <h3 className="font-bold">Chat with Us</h3>
               <button
@@ -216,7 +216,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                 <div className="flex-1 p-4 bg-gray-50 overflow-y-auto">
                   {messages.map((msg) => (
                     <div key={msg._id} className={`mb-3 ${msg.isAdmin ? 'text-left' : 'text-right'}`}>
-                      <div className={`inline-block p-3 rounded-lg shadow-sm max-w-xs ${
+                      <div className={`inline-block p-3 rounded-lg shadow-sm max-w-[250px] sm:max-w-xs ${
                         msg.isAdmin 
                           ? 'bg-white text-gray-700 border' 
                           : 'bg-teal-600 text-white'

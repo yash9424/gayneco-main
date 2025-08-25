@@ -115,7 +115,7 @@ export default function HomePage() {
               </motion.div>
               
               <motion.h1 
-                className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight"
                 variants={itemVariants}
               >
                 Get Your{' '}
@@ -137,7 +137,7 @@ export default function HomePage() {
               </motion.h1>
               
               <motion.p 
-                className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed font-medium"
+                className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 leading-relaxed font-medium"
                 variants={itemVariants}
               >
                 Walk-in clinic specializing in AHCCCS pregnancy confirmation, 
@@ -145,7 +145,7 @@ export default function HomePage() {
               </motion.p>
 
               <motion.div 
-                className="grid md:grid-cols-2 gap-4"
+                className="grid sm:grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4"
                 variants={containerVariants}
               >
                 {[
@@ -162,7 +162,7 @@ export default function HomePage() {
                     key={index}
                     variants={itemVariants}
                     whileHover={{ scale: 1.02, x: 5 }}
-                    className="flex items-center space-x-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-3 shadow-sm border border-gray-200/50 dark:border-gray-700/50"
+                    className="flex items-center space-x-2 sm:space-x-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-2 sm:p-3 shadow-sm border border-gray-200/50 dark:border-gray-700/50"
                   >
                     <motion.div 
                       className="w-6 h-6 bg-teal-500 dark:bg-teal-400 rounded-full flex items-center justify-center"
@@ -171,14 +171,14 @@ export default function HomePage() {
                     >
                       <Check className="w-4 h-4 text-white" />
                     </motion.div>
-                    <span className="text-gray-800 dark:text-gray-200 font-semibold text-sm">{item}</span>
+                    <span className="text-gray-800 dark:text-gray-200 font-semibold text-xs sm:text-sm">{item}</span>
                   </motion.div>
                 ))}
               </motion.div>
 
               {/* Staff Information */}
               <motion.div 
-                className="grid md:grid-cols-2 gap-4 mb-8"
+                className="grid sm:grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8"
                 variants={containerVariants}
               >
                 {[
@@ -189,7 +189,7 @@ export default function HomePage() {
                     key={index}
                     variants={itemVariants}
                     whileHover={{ scale: 1.03, y: -5 }}
-                    className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-200/50 dark:border-gray-700/50"
+                    className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200/50 dark:border-gray-700/50"
                   >
                     <div className="flex items-center space-x-3">
                       <motion.div 
@@ -200,8 +200,8 @@ export default function HomePage() {
                         {staff.designation}
                       </motion.div>
                       <div>
-                        <h3 className="font-bold text-gray-900 dark:text-white text-lg">{staff.name}</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{staff.title}</p>
+                        <h3 className="font-bold text-gray-900 dark:text-white text-base sm:text-lg">{staff.name}</h3>
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{staff.title}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -216,7 +216,7 @@ export default function HomePage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button size="lg" className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg" asChild>
+                  <Button size="lg" className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg shadow-lg w-full sm:w-auto" asChild>
                     <a href="tel:623-846-7597">
                       <Phone className="w-5 h-5 mr-2" />
                       Call 623-846-7597
@@ -227,7 +227,7 @@ export default function HomePage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button size="lg" variant="outline" className="border-2 border-teal-600 dark:border-teal-400 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/30 px-8 py-4 text-lg font-semibold rounded-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm" asChild>
+                  <Button size="lg" variant="outline" className="border-2 border-teal-600 dark:border-teal-400 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/30 px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm w-full sm:w-auto" asChild>
                     <a href="https://maps.google.com/?q=4700+N+51st+Ave,+Suite+5,+Phoenix,+AZ+85031" target="_blank" rel="noopener noreferrer">
                       <MapPin className="w-5 h-5 mr-2" />
                       Get Directions
@@ -252,7 +252,7 @@ export default function HomePage() {
                   <img
                     src="/images/female-doctor.png"
                     alt="Professional female doctor"
-                    className="w-full h-[600px] object-cover"
+                    className="w-full h-[400px] sm:h-[500px] lg:h-[600px] object-cover"
                   />
                   
                   {/* Gradient overlay for better card visibility */}
@@ -265,7 +265,7 @@ export default function HomePage() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 1.0 }}
                   whileHover={{ scale: 1.05, rotate: 2 }}
-                  className="absolute -top-6 -left-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700"
+                  className="absolute -top-4 -left-4 sm:-top-6 sm:-left-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-xl p-3 sm:p-6 border border-gray-100 dark:border-gray-700 hidden sm:block"
                 >
                   <div className="flex items-center space-x-3">
                     <motion.div 
@@ -287,7 +287,7 @@ export default function HomePage() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 1.2 }}
                   whileHover={{ scale: 1.05, rotate: -2 }}
-                  className="absolute -bottom-6 -right-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700"
+                  className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-xl p-3 sm:p-6 border border-gray-100 dark:border-gray-700 hidden sm:block"
                 >
                   <div className="flex items-center space-x-3">
                     <motion.div 
@@ -309,7 +309,7 @@ export default function HomePage() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 1.4 }}
                   whileHover={{ scale: 1.1, rotate: 360 }}
-                  className="absolute top-1/2 -right-8 transform -translate-y-1/2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-xl p-4 border border-gray-100 dark:border-gray-700"
+                  className="absolute top-1/2 -right-6 sm:-right-8 transform -translate-y-1/2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-full shadow-xl p-3 sm:p-4 border border-gray-100 dark:border-gray-700 hidden sm:block"
                 >
                   <Users className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                 </motion.div>

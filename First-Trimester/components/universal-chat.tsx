@@ -16,47 +16,6 @@ export default function UniversalChat({ siteName }: ChatProps) {
   const [conversationId, setConversationId] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Debug logging
-  useEffect(() => {
-    console.log('UniversalChat component loaded for:', siteName)
-  }, [])
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
-  // Listen for header chat button clicks
-  useEffect(() => {
-    const handleChatButtonClick = () => {
-      console.log('Chat button clicked')
-      setIsChatOpen(true)
-    }
-    
-    // Set up global function for header to call
-    if (typeof window !== 'undefined') {
-      (window as any).openChat = handleChatButtonClick
-    }
-    
-    // Listen for clicks on elements with data-chat-button attribute
-    const chatButtons = document.querySelectorAll('[data-chat-button]')
-    chatButtons.forEach(button => {
-      button.addEventListener('click', handleChatButtonClick)
-    })
-    
-    // Listen for custom events
-    window.addEventListener('toggleChat', handleChatButtonClick)
-    
-    return () => {
-      if (typeof window !== 'undefined') {
-        delete (window as any).openChat
-      }
-      chatButtons.forEach(button => {
-        button.removeEventListener('click', handleChatButtonClick)
-      })
-      window.removeEventListener('toggleChat', handleChatButtonClick)
-    }
-  }, [])
-
   const startChat = async () => {
     try {
       // First check if conversation already exists
@@ -147,23 +106,55 @@ export default function UniversalChat({ siteName }: ChatProps) {
     }
   }, [conversationId])
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
+  // Listen for header chat button clicks
+  useEffect(() => {
+    const handleChatButtonClick = () => {
+      setIsChatOpen(true)
+    }
+    
+    // Set up global function for header to call
+    if (typeof window !== 'undefined') {
+      (window as any).openChat = handleChatButtonClick
+    }
+    
+    // Listen for clicks on elements with data-chat-button attribute
+    const chatButtons = document.querySelectorAll('[data-chat-button]')
+    chatButtons.forEach(button => {
+      button.addEventListener('click', handleChatButtonClick)
+    })
+    
+    // Listen for custom events
+    window.addEventListener('toggleChat', handleChatButtonClick)
+    
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete (window as any).openChat
+      }
+      chatButtons.forEach(button => {
+        button.removeEventListener('click', handleChatButtonClick)
+      })
+      window.removeEventListener('toggleChat', handleChatButtonClick)
+    }
+  }, [])
+
   return (
     <>
       <button
-        onClick={() => {
-          console.log('Chat button clicked!')
-          setIsChatOpen(true)
-        }}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110"
-        style={{ zIndex: 9999 }}
+        data-chat-button
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16 bg-teal-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
       >
-        <MessageCircle className="w-7 h-7" />
+        <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" />
       </button>
 
       {isChatOpen && (
-        <div className="fixed bottom-20 right-6 z-50">
-          <div className="bg-white rounded-xl shadow-2xl w-96 h-[500px] flex flex-col border">
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-xl">
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 p-4 sm:p-0">
+          <div className="bg-white rounded-xl shadow-2xl w-full h-full sm:w-96 sm:h-[500px] flex flex-col border max-w-md mx-auto sm:mx-0">
+            <div className="flex items-center justify-between p-4 bg-teal-600 text-white rounded-t-xl">
               <h3 className="font-bold">Chat with Us</h3>
               <button
                 onClick={() => {
@@ -187,7 +178,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="text"
                       value={userInfo.name}
                       onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                       placeholder="Your name"
                     />
                   </div>
@@ -197,7 +188,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="number"
                       value={userInfo.age}
                       onChange={(e) => setUserInfo({...userInfo, age: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                       placeholder="Your age"
                     />
                   </div>
@@ -207,14 +198,14 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="text"
                       value={userInfo.contact}
                       onChange={(e) => setUserInfo({...userInfo, contact: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                       placeholder="Phone or email"
                     />
                   </div>
                   <button
                     onClick={startChat}
                     disabled={!userInfo.name || !userInfo.age || !userInfo.contact}
-                    className="w-full py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Start Chat
                   </button>
@@ -225,10 +216,10 @@ export default function UniversalChat({ siteName }: ChatProps) {
                 <div className="flex-1 p-4 bg-gray-50 overflow-y-auto">
                   {messages.map((msg) => (
                     <div key={msg._id} className={`mb-3 ${msg.isAdmin ? 'text-left' : 'text-right'}`}>
-                      <div className={`inline-block p-3 rounded-lg shadow-sm max-w-xs ${
+                      <div className={`inline-block p-3 rounded-lg shadow-sm max-w-[250px] sm:max-w-xs ${
                         msg.isAdmin 
                           ? 'bg-white text-gray-700 border' 
-                          : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                          : 'bg-teal-600 text-white'
                       }`}>
                         <p className="text-sm">{msg.message}</p>
                         <p className="text-xs mt-1 opacity-70">
@@ -239,7 +230,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                   ))}
                   <div ref={messagesEndRef} />
                 </div>
-                <div className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-b-xl">
+                <div className="p-4 bg-teal-600 rounded-b-xl">
                   <div className="flex space-x-2">
                     <input
                       type="text"
@@ -247,11 +238,11 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       onChange={(e) => setCurrentMessage(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Type your message..."
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white placeholder-gray-500"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
                     />
                     <button 
                       onClick={sendMessage}
-                      className="px-3 py-2 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
+                      className="px-3 py-2 bg-white text-teal-600 rounded-lg hover:bg-gray-100"
                     >
                       <Send className="w-4 h-4" />
                     </button>

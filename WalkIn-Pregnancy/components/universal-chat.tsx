@@ -18,17 +18,19 @@ export default function UniversalChat({ siteName }: ChatProps) {
 
   const startChat = async () => {
     try {
-      const apiUrl = 'https://binzo.fun/api/chat'
-      const checkResponse = await fetch(`${apiUrl}?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
+      // First check if conversation already exists
+      const checkResponse = await fetch(`/api/chat?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
       const checkData = await checkResponse.json()
       
       if (checkData.exists) {
+        // Load existing conversation
         setConversationId(checkData.chatId)
         setMessages(checkData.messages)
         setShowForm(false)
         return
       } else {
-        const response = await fetch(apiUrl, {
+        // Start new conversation
+        const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -62,6 +64,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     const messageToSend = currentMessage
     setCurrentMessage('')
     
+    // Add message to local state immediately
     const newMessage = {
       _id: Date.now(),
       message: messageToSend,
@@ -71,8 +74,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     setMessages(prev => [...prev, newMessage])
     
     try {
-      const apiUrl = 'https://binzo.fun/api/chat'
-      await fetch(apiUrl, {
+      await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -92,8 +94,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     if (conversationId) {
       const interval = setInterval(async () => {
         try {
-          const apiUrl = 'https://binzo.fun/api/chat'
-          const response = await fetch(`${apiUrl}?chatId=${conversationId}`)
+          const response = await fetch(`/api/chat?chatId=${conversationId}`)
           const data = await response.json()
           setMessages(data)
         } catch (err) {
@@ -109,20 +110,24 @@ export default function UniversalChat({ siteName }: ChatProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  // Listen for header chat button clicks
   useEffect(() => {
     const handleChatButtonClick = () => {
       setIsChatOpen(true)
     }
     
+    // Set up global function for header to call
     if (typeof window !== 'undefined') {
       (window as any).openChat = handleChatButtonClick
     }
     
+    // Listen for clicks on elements with data-chat-button attribute
     const chatButtons = document.querySelectorAll('[data-chat-button]')
     chatButtons.forEach(button => {
       button.addEventListener('click', handleChatButtonClick)
     })
     
+    // Listen for custom events
     window.addEventListener('toggleChat', handleChatButtonClick)
     
     return () => {
@@ -141,14 +146,14 @@ export default function UniversalChat({ siteName }: ChatProps) {
       <button
         data-chat-button
         onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-teal-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16 bg-teal-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
       >
-        <MessageCircle className="w-7 h-7" />
+        <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" />
       </button>
 
       {isChatOpen && (
-        <div className="fixed bottom-20 right-6 z-50">
-          <div className="bg-white rounded-xl shadow-2xl w-96 h-[500px] flex flex-col border">
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 p-4 sm:p-0">
+          <div className="bg-white rounded-xl shadow-2xl w-full h-full sm:w-96 sm:h-[500px] flex flex-col border max-w-md mx-auto sm:mx-0">
             <div className="flex items-center justify-between p-4 bg-teal-600 text-white rounded-t-xl">
               <h3 className="font-bold">Chat with Us</h3>
               <button
@@ -211,7 +216,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                 <div className="flex-1 p-4 bg-gray-50 overflow-y-auto">
                   {messages.map((msg) => (
                     <div key={msg._id} className={`mb-3 ${msg.isAdmin ? 'text-left' : 'text-right'}`}>
-                      <div className={`inline-block p-3 rounded-lg shadow-sm max-w-xs ${
+                      <div className={`inline-block p-3 rounded-lg shadow-sm max-w-[250px] sm:max-w-xs ${
                         msg.isAdmin 
                           ? 'bg-white text-gray-700 border' 
                           : 'bg-teal-600 text-white'
