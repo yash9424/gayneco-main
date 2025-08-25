@@ -3,12 +3,6 @@ import { getDb } from '../../../lib/mongodb'
 import { ObjectId } from 'mongodb'
 
 export async function POST(request: NextRequest) {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  }
-  
   try {
     const db = await getDb()
     const { message, project, userInfo, isAdmin, chatId } = await request.json()
@@ -44,23 +38,14 @@ export async function POST(request: NextRequest) {
     
     await db.collection('chats').insertOne(chatMessage)
     
-    return new Response(JSON.stringify({ success: true, chatId: finalChatId }), { headers })
+    return Response.json({ success: true, chatId: finalChatId })
   } catch (error) {
     console.error('Chat API error:', error)
-    return new Response(JSON.stringify({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }), { 
-      status: 500, 
-      headers 
-    })
+    return Response.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }
 
 export async function GET(request: NextRequest) {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  }
-  
   try {
     const db = await getDb()
     const { searchParams } = new URL(request.url)
@@ -70,13 +55,12 @@ export async function GET(request: NextRequest) {
     const contact = searchParams.get('contact')
     const project = searchParams.get('project')
     
-    let data
     if (chatId) {
       const messages = await db.collection('chats')
         .find({ chatId })
         .sort({ timestamp: 1 })
         .toArray()
-      data = messages
+      return Response.json(messages)
     } else if (name && age && contact && project) {
       // Check for existing conversation
       const userIdentity = `${name}_${age}_${contact}_${project}`
@@ -86,13 +70,13 @@ export async function GET(request: NextRequest) {
         .toArray()
       
       if (existingMessages.length > 0) {
-        data = { 
+        return Response.json({ 
           exists: true, 
           chatId: existingMessages[0].chatId,
           messages: existingMessages 
-        }
+        })
       } else {
-        data = { exists: false }
+        return Response.json({ exists: false })
       }
     } else {
       const chats = await db.collection('chats')
@@ -108,16 +92,11 @@ export async function GET(request: NextRequest) {
           { $match: { '_id.userIdentity': { $ne: null } } }
         ])
         .toArray()
-      data = chats
+      return Response.json(chats)
     }
-    
-    return new Response(JSON.stringify(data), { headers })
   } catch (error) {
     console.error('Chat GET API error:', error)
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), { 
-      status: 500, 
-      headers 
-    })
+    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }
 
@@ -141,12 +120,5 @@ export async function DELETE(request: NextRequest) {
 }
 
 export async function OPTIONS() {
-  return new Response(null, { 
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    }
-  })
+  return new Response(null, { status: 200 })
 }
