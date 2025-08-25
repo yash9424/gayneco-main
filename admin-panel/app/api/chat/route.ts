@@ -38,10 +38,16 @@ export async function POST(request: NextRequest) {
     
     await db.collection('chats').insertOne(chatMessage)
     
-    return Response.json({ success: true, chatId: finalChatId })
+    const response = Response.json({ success: true, chatId: finalChatId })
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type')
+    return response
   } catch (error) {
     console.error('Chat API error:', error)
-    return Response.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
+    const response = Response.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    return response
   }
 }
 
@@ -55,12 +61,13 @@ export async function GET(request: NextRequest) {
     const contact = searchParams.get('contact')
     const project = searchParams.get('project')
     
+    let response
     if (chatId) {
       const messages = await db.collection('chats')
         .find({ chatId })
         .sort({ timestamp: 1 })
         .toArray()
-      return Response.json(messages)
+      response = Response.json(messages)
     } else if (name && age && contact && project) {
       // Check for existing conversation
       const userIdentity = `${name}_${age}_${contact}_${project}`
@@ -70,13 +77,13 @@ export async function GET(request: NextRequest) {
         .toArray()
       
       if (existingMessages.length > 0) {
-        return Response.json({ 
+        response = Response.json({ 
           exists: true, 
           chatId: existingMessages[0].chatId,
           messages: existingMessages 
         })
       } else {
-        return Response.json({ exists: false })
+        response = Response.json({ exists: false })
       }
     } else {
       const chats = await db.collection('chats')
@@ -92,11 +99,18 @@ export async function GET(request: NextRequest) {
           { $match: { '_id.userIdentity': { $ne: null } } }
         ])
         .toArray()
-      return Response.json(chats)
+      response = Response.json(chats)
     }
+    
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type')
+    return response
   } catch (error) {
     console.error('Chat GET API error:', error)
-    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
+    const response = Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    return response
   }
 }
 
@@ -107,18 +121,28 @@ export async function DELETE(request: NextRequest) {
     const chatId = searchParams.get('chatId')
     
     if (!chatId) {
-      return Response.json({ error: 'chatId required' }, { status: 400 })
+      const response = Response.json({ error: 'chatId required' }, { status: 400 })
+      response.headers.set('Access-Control-Allow-Origin', '*')
+      return response
     }
     
     await db.collection('chats').deleteMany({ chatId })
     
-    return Response.json({ success: true })
+    const response = Response.json({ success: true })
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    return response
   } catch (error) {
     console.error('Chat DELETE API error:', error)
-    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
+    const response = Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    return response
   }
 }
 
 export async function OPTIONS() {
-  return new Response(null, { status: 200 })
+  const response = new Response(null, { status: 200 })
+  response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS')
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type')
+  return response
 }
