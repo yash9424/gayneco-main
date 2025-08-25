@@ -12,9 +12,7 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://72.60.30.153';
-    
-    fetch(`${API_BASE}/api/blogs/site/AHCCCSHelp`)
+    fetch('http://72.60.30.153/api/blogs')
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch')
         return res.json()
