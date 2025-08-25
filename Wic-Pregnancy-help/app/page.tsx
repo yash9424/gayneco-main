@@ -145,7 +145,7 @@ export default function HomePage() {
                 ></motion.div>
                 <div className="relative bg-white rounded-3xl p-2 shadow-xl">
                   <img
-                    src="/pregnant-woman-family.png"
+                    src="/wic-support-hero.png"
                     alt="Happy pregnant woman receiving support"
                     className="w-full h-auto rounded-2xl object-cover"
                   />
