@@ -18,7 +18,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
 
   const startChat = async () => {
     try {
-      const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://72.60.30.153';
+      const API_BASE = '/admin';
       
       // First check if conversation already exists
       const checkResponse = await fetch(`${API_BASE}/api/chat?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
@@ -76,7 +76,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     setMessages(prev => [...prev, newMessage])
     
     try {
-      const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://72.60.30.153';
+      const API_BASE = '/admin';
       
       await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
@@ -98,7 +98,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     if (conversationId) {
       const interval = setInterval(async () => {
         try {
-          const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://72.60.30.153';
+          const API_BASE = '/admin';
           const response = await fetch(`${API_BASE}/api/chat?chatId=${conversationId}`)
           const data = await response.json()
           setMessages(data)

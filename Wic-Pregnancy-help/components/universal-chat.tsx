@@ -16,40 +16,9 @@ export default function UniversalChat({ siteName }: ChatProps) {
   const [conversationId, setConversationId] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Listen for header chat button clicks
-  useEffect(() => {
-    const handleChatButtonClick = () => {
-      setIsChatOpen(true)
-    }
-    
-    // Set up global function for header to call
-    if (typeof window !== 'undefined') {
-      (window as any).openChat = handleChatButtonClick
-    }
-    
-    // Listen for clicks on elements with data-chat-button attribute
-    const chatButtons = document.querySelectorAll('[data-chat-button]')
-    chatButtons.forEach(button => {
-      button.addEventListener('click', handleChatButtonClick)
-    })
-    
-    // Listen for custom events
-    window.addEventListener('toggleChat', handleChatButtonClick)
-    
-    return () => {
-      if (typeof window !== 'undefined') {
-        delete (window as any).openChat
-      }
-      chatButtons.forEach(button => {
-        button.removeEventListener('click', handleChatButtonClick)
-      })
-      window.removeEventListener('toggleChat', handleChatButtonClick)
-    }
-  }, [])
-
   const startChat = async () => {
     try {
-      const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
+      const apiUrl = '/admin/api/chat'
       const checkResponse = await fetch(`${apiUrl}?name=${userInfo.name}&age=${userInfo.age}&contact=${userInfo.contact}&project=${siteName}`)
       const checkData = await checkResponse.json()
       
@@ -102,7 +71,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     setMessages(prev => [...prev, newMessage])
     
     try {
-      const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
+      const apiUrl = '/admin/api/chat'
       await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -123,7 +92,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
     if (conversationId) {
       const interval = setInterval(async () => {
         try {
-          const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'
+          const apiUrl = '/admin/api/chat'
           const response = await fetch(`${apiUrl}?chatId=${conversationId}`)
           const data = await response.json()
           setMessages(data)
@@ -140,11 +109,39 @@ export default function UniversalChat({ siteName }: ChatProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  useEffect(() => {
+    const handleChatButtonClick = () => {
+      setIsChatOpen(true)
+    }
+    
+    if (typeof window !== 'undefined') {
+      (window as any).openChat = handleChatButtonClick
+    }
+    
+    const chatButtons = document.querySelectorAll('[data-chat-button]')
+    chatButtons.forEach(button => {
+      button.addEventListener('click', handleChatButtonClick)
+    })
+    
+    window.addEventListener('toggleChat', handleChatButtonClick)
+    
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete (window as any).openChat
+      }
+      chatButtons.forEach(button => {
+        button.removeEventListener('click', handleChatButtonClick)
+      })
+      window.removeEventListener('toggleChat', handleChatButtonClick)
+    }
+  }, [])
+
   return (
     <>
       <button
+        data-chat-button
         onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-purple-600 hover:bg-purple-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-all duration-300 transform hover:scale-110"
       >
         <MessageCircle className="w-7 h-7" />
       </button>
@@ -152,7 +149,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
       {isChatOpen && (
         <div className="fixed bottom-20 right-6 z-50">
           <div className="bg-white rounded-xl shadow-2xl w-96 h-[500px] flex flex-col border">
-            <div className="flex items-center justify-between p-4 bg-purple-600 text-white rounded-t-xl">
+            <div className="flex items-center justify-between p-4 bg-green-600 text-white rounded-t-xl">
               <h3 className="font-bold">Chat with Us</h3>
               <button
                 onClick={() => {
@@ -176,7 +173,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="text"
                       value={userInfo.name}
                       onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Your name"
                     />
                   </div>
@@ -186,7 +183,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="number"
                       value={userInfo.age}
                       onChange={(e) => setUserInfo({...userInfo, age: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Your age"
                     />
                   </div>
@@ -196,14 +193,14 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       type="text"
                       value={userInfo.contact}
                       onChange={(e) => setUserInfo({...userInfo, contact: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Phone or email"
                     />
                   </div>
                   <button
                     onClick={startChat}
                     disabled={!userInfo.name || !userInfo.age || !userInfo.contact}
-                    className="w-full py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Start Chat
                   </button>
@@ -217,7 +214,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                       <div className={`inline-block p-3 rounded-lg shadow-sm max-w-xs ${
                         msg.isAdmin 
                           ? 'bg-white text-gray-700 border' 
-                          : 'bg-purple-600 text-white'
+                          : 'bg-green-600 text-white'
                       }`}>
                         <p className="text-sm">{msg.message}</p>
                         <p className="text-xs mt-1 opacity-70">
@@ -228,7 +225,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                   ))}
                   <div ref={messagesEndRef} />
                 </div>
-                <div className="p-4 bg-purple-600 rounded-b-xl">
+                <div className="p-4 bg-green-600 rounded-b-xl">
                   <div className="flex space-x-2">
                     <input
                       type="text"
@@ -240,7 +237,7 @@ export default function UniversalChat({ siteName }: ChatProps) {
                     />
                     <button 
                       onClick={sendMessage}
-                      className="px-3 py-2 bg-white text-purple-600 rounded-lg hover:bg-gray-100"
+                      className="px-3 py-2 bg-white text-green-600 rounded-lg hover:bg-gray-100"
                     >
                       <Send className="w-4 h-4" />
                     </button>
