@@ -10,9 +10,10 @@ export async function GET() {
     }
     const data = await response.json()
     // Filter blogs for this specific project
-    const filteredBlogs = data.filter(blog => 
-      blog.projects && blog.projects.includes('AHCCCSHelp')
-    )
+    const filteredBlogs = data.filter(blog => {
+      if (!blog.projects || !Array.isArray(blog.projects)) return false
+      return blog.projects.includes('AHCCCSHelp')
+    })
     return Response.json(filteredBlogs)
   } catch (error) {
     return Response.json([])
