@@ -63,6 +63,19 @@ export default function Header() {
                 </Button>
               </motion.div>
             </Link>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button 
+                variant="ghost" 
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as any).openChat) {
+                    (window as any).openChat()
+                  }
+                }}
+                className="text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-full px-4 transition-colors"
+              >
+                Chat
+              </Button>
+            </motion.div>
             <motion.a
               href="tel:623-846-7597"
               className="text-gray-700 hover:text-pink-600 font-medium text-sm px-3 py-2 rounded-full hover:bg-pink-50 transition-colors flex items-center"
@@ -125,6 +138,18 @@ export default function Header() {
                     Blog
                   </motion.div>
                 </Link>
+                <motion.button
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    if (typeof window !== 'undefined' && (window as any).openChat) {
+                      (window as any).openChat()
+                    }
+                  }}
+                  whileHover={{ scale: 1.02 }}
+                  className="block w-full text-left px-4 py-2 rounded-lg text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors"
+                >
+                  Chat
+                </motion.button>
                 <motion.a
                   href="tel:623-846-7597"
                   className="block w-full text-left px-4 py-2 rounded-lg text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors"

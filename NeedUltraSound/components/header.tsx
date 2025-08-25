@@ -24,6 +24,12 @@ export default function Header() {
     { name: 'Blog', href: '/blog' },
   ]
 
+  const handleChatClick = () => {
+    if (typeof window !== 'undefined' && (window as any).openChat) {
+      (window as any).openChat()
+    }
+  }
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -74,6 +80,12 @@ export default function Header() {
                   )}
                 </Link>
               ))}
+              <button
+                onClick={handleChatClick}
+                className="relative font-medium transition-colors duration-300 text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
+              >
+                Chat
+              </button>
             </nav>
 
             {/* Phone Number */}
@@ -116,6 +128,15 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false)
+                handleChatClick()
+              }}
+              className="block px-4 py-2 font-medium transition-colors duration-300 text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-left w-full"
+            >
+              Chat
+            </button>
           </nav>
         </motion.div>
       </div>

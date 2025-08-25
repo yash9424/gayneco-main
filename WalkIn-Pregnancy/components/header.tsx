@@ -46,7 +46,11 @@ export default function Header() {
                   Home
                 </Link>
                 <button
-                  onClick={() => window.dispatchEvent(new CustomEvent('openChat'))}
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && (window as any).openChat) {
+                      (window as any).openChat()
+                    }
+                  }}
                   className="font-semibold transition-all duration-300 px-6 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 flex items-center space-x-2"
                 >
                   <MessageCircle className="w-4 h-4" />
@@ -110,8 +114,10 @@ export default function Header() {
                 </Link>
                 <button
                   onClick={() => {
-                    window.dispatchEvent(new CustomEvent('openChat'))
                     setIsMenuOpen(false)
+                    if (typeof window !== 'undefined' && (window as any).openChat) {
+                      (window as any).openChat()
+                    }
                   }}
                   className="font-semibold transition-all duration-300 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 flex items-center space-x-2 text-left"
                 >

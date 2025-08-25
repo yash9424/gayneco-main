@@ -58,6 +58,18 @@ export default function Header() {
                   </Link>
                 </motion.div>
               ))}
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <button
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && (window as any).openChat) {
+                      (window as any).openChat()
+                    }
+                  }}
+                  className="px-4 lg:px-6 py-2 lg:py-3 rounded-xl font-medium transition-all duration-300 text-sm lg:text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                  Chat
+                </button>
+              </motion.div>
               {mounted && (
   <div className="hidden lg:flex items-center ml-6 text-base text-gray-700 dark:text-gray-200 font-semibold ms-4">
     <Phone className="w-4 h-4 mr-2" />
@@ -104,6 +116,17 @@ export default function Header() {
                     {item.label}
                   </Link>
                 ))}
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    if (typeof window !== 'undefined' && (window as any).openChat) {
+                      (window as any).openChat()
+                    }
+                  }}
+                  className="block px-4 py-3 rounded-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 text-left w-full"
+                >
+                  Chat
+                </button>
 
               </div>
             </motion.div>

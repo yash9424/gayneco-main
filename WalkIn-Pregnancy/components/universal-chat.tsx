@@ -16,6 +16,39 @@ export default function UniversalChat({ siteName }: ChatProps) {
   const [conversationId, setConversationId] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // Listen for header chat button clicks
+  useEffect(() => {
+    const handleChatButtonClick = () => {
+      setIsChatOpen(true)
+    }
+    
+    // Set up global function for header to call
+    if (typeof window !== 'undefined') {
+      (window as any).openChat = handleChatButtonClick
+    }
+    
+    // Listen for clicks on elements with data-chat-button attribute
+    const chatButtons = document.querySelectorAll('[data-chat-button]')
+    chatButtons.forEach(button => {
+      button.addEventListener('click', handleChatButtonClick)
+    })
+    
+    // Listen for custom events
+    window.addEventListener('toggleChat', handleChatButtonClick)
+    window.addEventListener('openChat', handleChatButtonClick)
+    
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete (window as any).openChat
+      }
+      chatButtons.forEach(button => {
+        button.removeEventListener('click', handleChatButtonClick)
+      })
+      window.removeEventListener('toggleChat', handleChatButtonClick)
+      window.removeEventListener('openChat', handleChatButtonClick)
+    }
+  }, [])
+
   const startChat = async () => {
     try {
       const apiUrl = 'http://72.60.30.153/api/cross-domain/chat'

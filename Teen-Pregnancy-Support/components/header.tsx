@@ -11,6 +11,12 @@ export default function Header() {
   const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const handleChatClick = () => {
+    if (typeof window !== 'undefined' && (window as any).openChat) {
+      (window as any).openChat()
+    }
+  }
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b border-[#26619C]/30" style={{ backgroundColor: 'rgba(38, 97, 156, 0.95)' }}>
       <div className="container mx-auto px-3 sm:px-4 lg:px-8 py-3 sm:py-4">
@@ -42,6 +48,12 @@ export default function Header() {
                   <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white rounded-full"></div>
                 )}
               </Link>
+              <button
+                onClick={handleChatClick}
+                className="font-medium transition-all duration-300 hover:text-white relative px-3 py-2 text-blue-100"
+              >
+                Chat
+              </button>
             </nav>
             
             <a href="tel:623-846-7597" className="flex items-center gap-2 text-white hover:text-blue-100 transition-colors">
@@ -82,6 +94,15 @@ export default function Header() {
               >
                 Blog
               </Link>
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  handleChatClick()
+                }}
+                className="font-medium transition-colors duration-300 px-3 py-2 text-blue-100 text-left w-full"
+              >
+                Chat
+              </button>
               <a 
                 href="tel:623-846-7597" 
                 className="flex items-center gap-2 text-white hover:text-blue-100 transition-colors px-3 py-2"
