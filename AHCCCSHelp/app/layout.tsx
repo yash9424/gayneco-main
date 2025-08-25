@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 
 import { ThemeProvider } from '@/components/theme-provider'
+import UniversalChat from '@/components/universal-chat'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,6 +29,7 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           {children}
+          <UniversalChat siteName="AHCCCSHelp" />
         </ThemeProvider>
       </body>
     </html>

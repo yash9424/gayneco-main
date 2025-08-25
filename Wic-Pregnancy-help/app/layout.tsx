@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { ThemeProvider } from '@/components/theme-provider'
+import UniversalChat from '@/components/universal-chat'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,6 +34,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <UniversalChat siteName="Wic-Pregnancy-help" />
         </ThemeProvider>
       </body>
     </html>

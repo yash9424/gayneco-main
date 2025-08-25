@@ -11,7 +11,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { language, translations, setLanguage } = useLanguage()
   const [isLangOpen, setIsLangOpen] = useState(false)
-  const [isChatOpen, setIsChatOpen] = useState(false)
+
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-emerald-100/50 shadow-lg">
@@ -36,9 +36,10 @@ export default function Header() {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
             <button
-              onClick={() => setIsChatOpen(true)}
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('toggleChat'))
+              }}
               className="text-gray-700 hover:text-emerald-600 transition-all duration-300 font-medium relative group flex items-center space-x-1"
-              data-chat-button
             >
               <MessageCircle className="w-4 h-4" />
               <span>Chat</span>
@@ -71,9 +72,12 @@ export default function Header() {
                 {translations.nav.blog}
               </Link>
               <button
-                onClick={() => setIsChatOpen(true)}
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as any).openChat) {
+                    (window as any).openChat()
+                  }
+                }}
                 className="text-gray-700 hover:text-emerald-600 transition-colors font-medium flex items-center space-x-2 text-left"
-                data-chat-button
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Chat</span>

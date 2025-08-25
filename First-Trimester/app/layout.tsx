@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Outfit } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
-import ChatWidget from '@/components/chat-widget'
+import UniversalChat from '@/components/universal-chat'
 
 const inter = Inter({ subsets: ['latin'] })
 const outfit = Outfit({ 
@@ -44,7 +44,7 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           {children}
-          <ChatWidget />
+          <UniversalChat siteName="First-Trimester" />
         </ThemeProvider>
       </body>
     </html>

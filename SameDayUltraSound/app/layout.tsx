@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import "./globals.css"
 import Header from "@/components/header"
 import { ThemeProvider } from "@/components/theme-provider"
+import UniversalChat from "@/components/universal-chat"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -30,6 +31,7 @@ export default function RootLayout({
           <main className="min-h-screen">
             {children}
           </main>
+          <UniversalChat siteName="SameDayUltraSound" />
         </ThemeProvider>
       </body>
     </html>

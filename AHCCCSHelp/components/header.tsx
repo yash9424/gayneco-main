@@ -79,8 +79,7 @@ export default function Header() {
                 </Link>
                 <button
                   onClick={() => {
-                    const chatButton = document.querySelector('[data-chat-button]') as HTMLButtonElement
-                    if (chatButton) chatButton.click()
+                    window.dispatchEvent(new CustomEvent('toggleChat'))
                   }}
                   className="font-semibold transition-all duration-300 px-6 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 flex items-center"
                 >
@@ -138,8 +137,7 @@ export default function Header() {
                 <button
                   onClick={() => {
                     setIsMenuOpen(false)
-                    const chatButton = document.querySelector('[data-chat-button]') as HTMLButtonElement
-                    if (chatButton) chatButton.click()
+                    window.dispatchEvent(new CustomEvent('toggleChat'))
                   }}
                   className="font-semibold transition-all duration-300 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 flex items-center"
                 >
