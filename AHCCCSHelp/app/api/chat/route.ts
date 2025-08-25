@@ -19,13 +19,18 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    // Add project name for AHCCCSHelp
+    const requestBody = {
+      ...body,
+      project: body.project || 'AHCCCSHelp'
+    }
     const response = await fetch('https://binzo.fun/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Origin': 'https://ahcccshelp.com'
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(requestBody)
     })
     if (!response.ok) {
       return Response.json({ error: 'Failed to send' }, { status: 500 })
