@@ -20,8 +20,14 @@ export async function POST(request: Request) {
       body: JSON.stringify(body)
     })
     const data = await response.json()
+    
+    // Ensure success field exists for chat component
+    if (!data.success && !data.error) {
+      data.success = true
+    }
+    
     return Response.json(data)
   } catch (error) {
-    return Response.json({ error: 'Failed to send chat data' }, { status: 500 })
+    return Response.json({ error: 'Failed to send chat data', success: false }, { status: 500 })
   }
 }
