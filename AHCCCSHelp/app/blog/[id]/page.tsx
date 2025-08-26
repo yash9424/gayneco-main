@@ -6,7 +6,7 @@ import { Calendar, ArrowLeft, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
-import ChatWidget from '@/components/chat-widget'
+import UniversalChat from '@/components/universal-chat'
 
 export default function BlogPost() {
   const [post, setPost] = useState(null)
@@ -43,7 +43,7 @@ export default function BlogPost() {
           </div>
         </div>
         <Footer />
-        <ChatWidget />
+        <UniversalChat siteName="AHCCCSHelp" />
       </div>
     )
   }
@@ -67,7 +67,7 @@ export default function BlogPost() {
           </div>
         </div>
         <Footer />
-        <ChatWidget />
+        <UniversalChat siteName="AHCCCSHelp" />
       </div>
     )
   }
@@ -123,7 +123,7 @@ export default function BlogPost() {
         </div>
       </div>
       <Footer />
-      <ChatWidget />
+      <UniversalChat siteName="AHCCCSHelp" />
     </div>
   )
 }
