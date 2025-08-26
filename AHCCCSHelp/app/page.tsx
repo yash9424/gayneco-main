@@ -84,10 +84,6 @@ export default function HomePage() {
             src="/images/clinic-background.png"
             alt="Modern medical clinic interior"
             className="w-full h-full object-cover opacity-80 dark:opacity-40"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.parentElement.style.background = 'linear-gradient(135deg, #f0fdfa, #cffafe)';
-            }}
           />
         </motion.div>
 
