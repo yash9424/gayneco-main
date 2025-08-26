@@ -82,11 +82,18 @@ export default function HomePage() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/75 to-white/60 dark:from-gray-900/90 dark:via-gray-900/75 dark:to-gray-900/60 z-10"></div>
           <img
-            src="/images/clinic-background.png"
+            src="/placeholder.jpg"
             alt="Modern medical clinic interior"
             className="w-full h-full object-cover opacity-80 dark:opacity-40"
             onError={(e) => {
-              e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwZDk0ODgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNmI2ZDQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+';
+              const target = e.currentTarget;
+              target.style.display = 'none';
+              const parent = target.parentElement;
+              if (parent && !parent.querySelector('.fallback-bg')) {
+                const fallback = document.createElement('div');
+                fallback.className = 'fallback-bg absolute inset-0 bg-gradient-to-br from-teal-500 to-cyan-600 opacity-30';
+                parent.appendChild(fallback);
+              }
             }}
           />
         </motion.div>
@@ -255,7 +262,7 @@ export default function HomePage() {
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
                   <img
-                    src="/images/female-doctor.png"
+                    src="/doctor-image.png"
                     alt="Professional female doctor"
                     className="w-full h-[350px] sm:h-[450px] lg:h-[550px] object-cover"
                     onError={(e) => {
