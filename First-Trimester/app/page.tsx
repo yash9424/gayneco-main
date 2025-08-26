@@ -47,8 +47,11 @@ export default function HomePage() {
           style={{ y, opacity }}
         >
           <div 
-            className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900"
-            style={{ filter: "brightness(0.3)" }}
+            className="w-full h-full bg-cover bg-center"
+            style={{ 
+              backgroundImage: "url('/images/hero-medical-bg.png')",
+              filter: "brightness(0.3)"
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-indigo-900/70 to-purple-900/80" />
         </motion.div>
@@ -379,9 +382,12 @@ export default function HomePage() {
               className="relative"
             >
               <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                <div className="w-full h-80 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                  <Stethoscope className="w-24 h-24 text-white/80" />
-                </div>
+                <img
+                  src="/images/doctor-patient-consultation.png"
+                  alt="Doctor consultation"
+                  className="w-full h-80 object-cover rounded-2xl"
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
+                />
                 <div className="mt-6 text-center">
                   <h3 className="text-2xl font-bold text-white mb-2">Expert Care Team</h3>
                   <p className="text-blue-100">Dedicated to your health and comfort</p>
