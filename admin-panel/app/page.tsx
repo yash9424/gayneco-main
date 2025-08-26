@@ -59,6 +59,8 @@ export default function AdminPanel() {
   })
   const [editingBlog, setEditingBlog] = useState<any>(null)
   const [blogFilters, setBlogFilters] = useState({ site: '', date: '' })
+  const [selectedBlogs, setSelectedBlogs] = useState<string[]>([])
+  const [selectAllBlogs, setSelectAllBlogs] = useState(false)
   const [chatFilters, setChatFilters] = useState({ name: '', date: '' })
   const chatMessagesEndRef = useRef<HTMLDivElement>(null)
   
@@ -249,6 +251,50 @@ export default function AdminPanel() {
       setSelectedChats(selectedChats.filter(id => id !== chatId))
     } else {
       setSelectedChats([...selectedChats, chatId])
+    }
+  }
+
+  const handleBulkDeleteBlogs = async () => {
+    if (selectedBlogs.length === 0) return
+    
+    if (confirm(`Delete ${selectedBlogs.length} selected blogs?`)) {
+      try {
+        const deletePromises = selectedBlogs.map(blogId => 
+          fetch(`/api/blogs?id=${blogId}`, { method: 'DELETE' })
+        )
+        
+        await Promise.all(deletePromises)
+        success(`${selectedBlogs.length} blogs deleted successfully`)
+        setSelectedBlogs([])
+        setSelectAllBlogs(false)
+        fetch('/api/blogs').then(r => r.json()).then(setBlogs)
+      } catch (err) {
+        error('Failed to delete blogs')
+      }
+    }
+  }
+
+  const handleSelectAllBlogs = () => {
+    const currentFilteredBlogs = blogs.filter((blog: any) => {
+      if (blogFilters.site && !blog.projects?.includes(blogFilters.site)) return false
+      if (blogFilters.date && new Date(blog.createdAt).toDateString() !== new Date(blogFilters.date).toDateString()) return false
+      return true
+    })
+    
+    if (selectAllBlogs) {
+      setSelectedBlogs([])
+      setSelectAllBlogs(false)
+    } else {
+      setSelectedBlogs(currentFilteredBlogs.map((blog: any) => blog._id))
+      setSelectAllBlogs(true)
+    }
+  }
+
+  const handleBlogSelect = (blogId: string) => {
+    if (selectedBlogs.includes(blogId)) {
+      setSelectedBlogs(selectedBlogs.filter(id => id !== blogId))
+    } else {
+      setSelectedBlogs([...selectedBlogs, blogId])
     }
   }
 
@@ -556,7 +602,7 @@ export default function AdminPanel() {
                 </div>
                 
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-                  <div className="flex flex-wrap gap-4 items-end">
+                  <div className="flex flex-wrap gap-4 items-end mb-4">
                     <div className="flex-1 min-w-48">
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Filter by Site</label>
                       <select
@@ -587,6 +633,37 @@ export default function AdminPanel() {
                       Reset
                     </Button>
                   </div>
+                  
+                  {/* Bulk Actions */}
+                  <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-600 pt-4">
+                    <div className="flex items-center space-x-3">
+                      <label className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectAllBlogs}
+                          onChange={handleSelectAllBlogs}
+                          className="w-4 h-4 rounded"
+                        />
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Select All</span>
+                      </label>
+                      {selectedBlogs.length > 0 && (
+                        <span className="text-sm text-blue-600 dark:text-blue-400">
+                          {selectedBlogs.length} selected
+                        </span>
+                      )}
+                    </div>
+                    
+                    {selectedBlogs.length > 0 && (
+                      <Button
+                        onClick={handleBulkDeleteBlogs}
+                        variant="ghost"
+                        className="text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete Selected ({selectedBlogs.length})
+                      </Button>
+                    )}
+                  </div>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -596,8 +673,18 @@ export default function AdminPanel() {
                     return true
                   }).map((blog: any) => (
                     <div key={blog._id} className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{blog.title}</h3>
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-start space-x-3 flex-1">
+                          <input
+                            type="checkbox"
+                            checked={selectedBlogs.includes(blog._id)}
+                            onChange={() => handleBlogSelect(blog._id)}
+                            className="w-4 h-4 rounded mt-1"
+                          />
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{blog.title}</h3>
+                          </div>
+                        </div>
                         <div className="flex space-x-2">
                           <Button size="sm" variant="ghost" onClick={() => setViewingBlog(blog)}>
                             <Eye className="w-4 h-4" />
@@ -627,8 +714,8 @@ export default function AdminPanel() {
                           </Button>
                         </div>
                       </div>
-                      <p className="text-gray-600 dark:text-gray-400 mb-4">{blog.excerpt}</p>
-                      <div className="flex flex-wrap gap-1">
+                      <p className="text-gray-600 dark:text-gray-400 mb-4 ml-7">{blog.excerpt}</p>
+                      <div className="flex flex-wrap gap-1 ml-7">
                         {blog.projects?.map((project: string) => (
                           <span key={project} className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded">
                             {project}
