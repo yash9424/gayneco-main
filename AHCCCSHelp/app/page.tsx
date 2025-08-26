@@ -85,16 +85,6 @@ export default function HomePage() {
             src="/images/clinic-background.png"
             alt="Modern medical clinic interior"
             className="w-full h-full object-cover opacity-80 dark:opacity-40"
-            onError={(e) => {
-              const target = e.currentTarget;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent && !parent.querySelector('.fallback-bg')) {
-                const fallback = document.createElement('div');
-                fallback.className = 'fallback-bg absolute inset-0 bg-gradient-to-br from-teal-500 to-cyan-600 opacity-30';
-                parent.appendChild(fallback);
-              }
-            }}
           />
         </motion.div>
 
@@ -262,7 +252,7 @@ export default function HomePage() {
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
                   <img
-                    src="/doctor-image.png"
+                    src="/images/female-doctor.png"
                     alt="Professional female doctor"
                     className="w-full h-[350px] sm:h-[450px] lg:h-[550px] object-cover"
                     onError={(e) => {
