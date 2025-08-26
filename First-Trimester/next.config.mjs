@@ -8,11 +8,7 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
-    domains: ['localhost'],
   },
-  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
-  trailingSlash: true,
-  output: 'export',
 }
 
 export default nextConfig
