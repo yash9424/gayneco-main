@@ -102,6 +102,8 @@ export default function AdminPanel() {
   const [chatMessages, setChatMessages] = useState<any[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [selectedSite, setSelectedSite] = useState('')
+  const [selectedChats, setSelectedChats] = useState<string[]>([])
+  const [selectAll, setSelectAll] = useState(false)
   
   const filteredChats = selectedSite ? chats.filter((chat: any) => chat.project === selectedSite) : chats
   const [imagePreview, setImagePreview] = useState<string | null>(null)
@@ -203,6 +205,50 @@ export default function AdminPanel() {
       }
     } catch (err) {
       error('Failed to send message')
+    }
+  }
+
+  const handleBulkDelete = async () => {
+    if (selectedChats.length === 0) return
+    
+    if (confirm(`Delete ${selectedChats.length} selected conversations?`)) {
+      try {
+        const deletePromises = selectedChats.map(chatId => 
+          fetch(`/api/chat?chatId=${chatId}`, { method: 'DELETE' })
+        )
+        
+        await Promise.all(deletePromises)
+        success(`${selectedChats.length} conversations deleted successfully`)
+        setSelectedChats([])
+        setSelectAll(false)
+        fetchConversations()
+      } catch (err) {
+        error('Failed to delete conversations')
+      }
+    }
+  }
+
+  const handleSelectAll = () => {
+    const currentFilteredChats = filteredChats.filter((chat: any) => {
+      if (chatFilters.name && !chat.userInfo?.name?.toLowerCase().includes(chatFilters.name.toLowerCase())) return false
+      if (chatFilters.date && new Date(chat.lastMessage).toDateString() !== new Date(chatFilters.date).toDateString()) return false
+      return true
+    })
+    
+    if (selectAll) {
+      setSelectedChats([])
+      setSelectAll(false)
+    } else {
+      setSelectedChats(currentFilteredChats.map((chat: any) => chat.chatId))
+      setSelectAll(true)
+    }
+  }
+
+  const handleChatSelect = (chatId: string) => {
+    if (selectedChats.includes(chatId)) {
+      setSelectedChats(selectedChats.filter(id => id !== chatId))
+    } else {
+      setSelectedChats([...selectedChats, chatId])
     }
   }
 
@@ -658,7 +704,7 @@ export default function AdminPanel() {
                     </div>
                     
                     <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
-                      <div className="flex flex-wrap gap-4 items-end">
+                      <div className="flex flex-wrap gap-4 items-end mb-4">
                         <div className="flex-1 min-w-48">
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Filter by Name</label>
                           <input
@@ -686,6 +732,37 @@ export default function AdminPanel() {
                           Reset
                         </Button>
                       </div>
+                      
+                      {/* Bulk Actions */}
+                      <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-600 pt-4">
+                        <div className="flex items-center space-x-3">
+                          <label className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={selectAll}
+                              onChange={handleSelectAll}
+                              className="w-4 h-4 rounded"
+                            />
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Select All</span>
+                          </label>
+                          {selectedChats.length > 0 && (
+                            <span className="text-sm text-blue-600 dark:text-blue-400">
+                              {selectedChats.length} selected
+                            </span>
+                          )}
+                        </div>
+                        
+                        {selectedChats.length > 0 && (
+                          <Button
+                            onClick={handleBulkDelete}
+                            variant="ghost"
+                            className="text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete Selected ({selectedChats.length})
+                          </Button>
+                        )}
+                      </div>
                     </div>
                     <div className="space-y-3 max-h-96 overflow-y-auto">
                       {filteredChats.filter((chat: any) => {
@@ -704,12 +781,21 @@ export default function AdminPanel() {
                       }).map((conversation: any) => (
                         <div key={conversation._id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                           <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center space-x-3 cursor-pointer flex-1" onClick={() => setViewingChat(conversation)}>
-                              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                <span className="text-white text-sm font-semibold">{conversation.userInfo?.name?.charAt(0)}</span>
-                              </div>
-                              <div>
-                                <span className="font-medium text-gray-900 dark:text-white">{conversation.userInfo?.name}</span>
+                            <div className="flex items-center space-x-3 flex-1">
+                              <input
+                                type="checkbox"
+                                checked={selectedChats.includes(conversation.chatId)}
+                                onChange={() => handleChatSelect(conversation.chatId)}
+                                className="w-4 h-4 rounded"
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                              <div className="flex items-center space-x-3 cursor-pointer flex-1" onClick={() => setViewingChat(conversation)}>
+                                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                  <span className="text-white text-sm font-semibold">{conversation.userInfo?.name?.charAt(0)}</span>
+                                </div>
+                                <div>
+                                  <span className="font-medium text-gray-900 dark:text-white">{conversation.userInfo?.name}</span>
+                                </div>
                               </div>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -743,7 +829,7 @@ export default function AdminPanel() {
                               </Button>
                             </div>
                           </div>
-                          <div className="text-sm text-gray-600 dark:text-gray-300 cursor-pointer" onClick={() => setViewingChat(conversation)}>
+                          <div className="text-sm text-gray-600 dark:text-gray-300 cursor-pointer ml-7" onClick={() => setViewingChat(conversation)}>
                             <p>Age: {conversation.userInfo?.age} | Contact: {conversation.userInfo?.contact}</p>
                           </div>
                         </div>
