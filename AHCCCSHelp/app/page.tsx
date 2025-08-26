@@ -82,7 +82,7 @@ export default function HomePage() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/75 to-white/60 dark:from-gray-900/90 dark:via-gray-900/75 dark:to-gray-900/60 z-10"></div>
           <img
-            src="/placeholder.jpg"
+            src="/images/clinic-background.png"
             alt="Modern medical clinic interior"
             className="w-full h-full object-cover opacity-80 dark:opacity-40"
             onError={(e) => {
