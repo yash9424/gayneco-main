@@ -49,7 +49,7 @@ export default function HomePage() {
           <div 
             className="w-full h-full bg-cover bg-center"
             style={{ 
-              backgroundImage: "url('/gayneco-main/First-Trimester/images/hero-medical-bg.png')",
+              backgroundImage: "url('/images/hero-medical-bg.png')",
               filter: "brightness(0.3)"
             }}
           />
@@ -383,9 +383,10 @@ export default function HomePage() {
             >
               <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
                 <img
-                  src="/gayneco-main/First-Trimester/public/images/doctor-patient-consultation.png"
+                  src="/images/doctor-patient-consultation.png"
                   alt="Doctor consultation"
                   className="w-full h-80 object-cover rounded-2xl"
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
                 />
                 <div className="mt-6 text-center">
                   <h3 className="text-2xl font-bold text-white mb-2">Expert Care Team</h3>

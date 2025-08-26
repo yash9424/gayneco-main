@@ -9,8 +9,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '/gayneco-main/First-Trimester',
-  assetPrefix: '/gayneco-main/First-Trimester',
 }
 
 export default nextConfig
