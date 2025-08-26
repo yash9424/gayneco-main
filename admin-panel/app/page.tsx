@@ -1058,6 +1058,24 @@ export default function AdminPanel() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Sites</label>
                 <div className="grid grid-cols-1 gap-3">
+                  {/* Select All Option */}
+                  <label className="flex items-center space-x-3 cursor-pointer border-b border-gray-200 dark:border-gray-600 pb-2 mb-2">
+                    <input
+                      type="checkbox"
+                      checked={blogForm.selectedSites.length === BLOG_SITES.length}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setBlogForm({...blogForm, selectedSites: BLOG_SITES.map(site => site.name)})
+                        } else {
+                          setBlogForm({...blogForm, selectedSites: []})
+                        }
+                      }}
+                      className="w-4 h-4 rounded"
+                    />
+                    <span className="text-base font-bold text-blue-600 dark:text-blue-400">Select All Sites</span>
+                  </label>
+                  
+                  {/* Individual Sites */}
                   {BLOG_SITES.map((site) => (
                     <label key={site.name} className="flex items-center space-x-3 cursor-pointer">
                       <input
