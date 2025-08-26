@@ -7,16 +7,16 @@ import { useToast, ToastComponent } from '@/components/ui/toast'
 import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload, Edit, Trash2, Send, Bell, BarChart3 } from 'lucide-react'
 
 const PROJECTS = [
-  { name: 'AHCCCSHelp', port: 3001, color: 'bg-blue-500' },
-  { name: 'First-Trimester', port: 3002, color: 'bg-green-500' },
-  { name: 'FreePregnencyTest', port: 3003, color: 'bg-purple-500' },
-  { name: 'Low-cost-pregnancy', port: 3004, color: 'bg-orange-500' },
-  { name: 'NeedUltraSound', port: 3005, color: 'bg-pink-500' },
-  { name: 'Pregnancy-Test', port: 3006, color: 'bg-indigo-500' },
-  { name: 'SameDayUltraSound', port: 3007, color: 'bg-teal-500' },
-  { name: 'Teen-Pregnancy-Support', port: 3008, color: 'bg-red-500' },
-  { name: 'WalkIn-Pregnancy', port: 3009, color: 'bg-yellow-500' },
-  { name: 'Wic-Pregnancy-help', port: 3010, color: 'bg-cyan-500' }
+  { name: 'AHCCCSHelp', port: 3001, domain: 'https://ahcccshelp.com', color: 'bg-blue-500' },
+  { name: 'First-Trimester', port: 3002, domain: 'https://firsttrimesterpregnancy.com', color: 'bg-green-500' },
+  { name: 'FreePregnencyTest', port: 3003, domain: 'https://freepregnancytestaz.com', color: 'bg-purple-500' },
+  { name: 'Low-cost-pregnancy', port: 3004, domain: 'https://lowcostpregnancy.com', color: 'bg-orange-500' },
+  { name: 'NeedUltraSound', port: 3005, domain: 'https://needultrasoundtoday.com', color: 'bg-pink-500' },
+  { name: 'Pregnancy-Test', port: 3006, domain: 'https://firstpregnancytest.com', color: 'bg-indigo-500' },
+  { name: 'SameDayUltraSound', port: 3007, domain: 'https://samedayultrasoundaz.com', color: 'bg-teal-500' },
+  { name: 'Teen-Pregnancy-Support', port: 3008, domain: 'https://teenpregnancysupportaz.com', color: 'bg-red-500' },
+  { name: 'WalkIn-Pregnancy', port: 3009, domain: 'https://walkinpregnancy.com', color: 'bg-yellow-500' },
+  { name: 'Wic-Pregnancy-help', port: 3010, domain: 'https://wicpregnancyhelp.com', color: 'bg-cyan-500' }
 ]
 
 const BLOG_SITES = [
@@ -483,10 +483,10 @@ export default function AdminPanel() {
                       <div className={`w-3 h-3 rounded-full ${project.color}`}></div>
                       <h3 className="font-semibold text-gray-900 dark:text-white">{project.name}</h3>
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Port: {project.port}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{project.domain}</p>
                     <Button 
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                      onClick={() => window.open(`http://localhost:${project.port}`, '_blank')}
+                      onClick={() => window.open(project.domain, '_blank')}
                     >
                       <Globe className="w-4 h-4 mr-2" />
                       View Site
