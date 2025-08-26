@@ -49,7 +49,7 @@ export default function HomePage() {
           <div 
             className="w-full h-full bg-cover bg-center"
             style={{ 
-              backgroundImage: "url('/images/hero-medical-bg.png')",
+              backgroundImage: "url('/gayneco-main/First-Trimester/images/hero-medical-bg.png')",
               filter: "brightness(0.3)"
             }}
           />
@@ -382,13 +382,10 @@ export default function HomePage() {
               className="relative"
             >
               <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                <Image
-                  src="/images/doctor-patient-consultation.png"
+                <img
+                  src="/gayneco-main/First-Trimester/public/images/doctor-patient-consultation.png"
                   alt="Doctor consultation"
-                  width={400}
-                  height={320}
                   className="w-full h-80 object-cover rounded-2xl"
-                  priority
                 />
                 <div className="mt-6 text-center">
                   <h3 className="text-2xl font-bold text-white mb-2">Expert Care Team</h3>
