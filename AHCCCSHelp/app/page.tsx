@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
 import UniversalChat from '@/components/universal-chat'
-
+import Image from 'next/image'
 
 import { useRef } from 'react'
 
@@ -81,10 +81,12 @@ export default function HomePage() {
           style={{ y, opacity }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/75 to-white/60 dark:from-gray-900/90 dark:via-gray-900/75 dark:to-gray-900/60 z-10"></div>
-          <img
+          <Image
             src="/images/clinic-background.png"
             alt="Modern medical clinic interior"
-            className="w-full h-full object-cover opacity-80 dark:opacity-40"
+            fill
+            className="object-cover opacity-80 dark:opacity-40"
+            priority
           />
         </motion.div>
 
@@ -251,19 +253,15 @@ export default function HomePage() {
                   whileHover={{ scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
-                  <img
+                  <Image
                     src="/images/female-doctor.png"
                     alt="Professional female doctor"
+                    width={400}
+                    height={550}
                     className="w-full h-[350px] sm:h-[450px] lg:h-[550px] object-cover"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.parentElement.innerHTML = '<div class="w-full h-[350px] sm:h-[450px] lg:h-[550px] bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center"><div class="text-white text-6xl font-bold opacity-30">👩‍⚕️</div></div>';
-                    }}
+                    priority
                   />
                 </motion.div>
-                
-
-
               </div>
             </motion.div>
           </motion.div>
