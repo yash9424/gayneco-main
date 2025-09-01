@@ -3,8 +3,9 @@ import { MongoClient, Db } from 'mongodb'
 const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017'
 const options = {
   maxPoolSize: 10,
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
+  serverSelectionTimeoutMS: 2000,
+  socketTimeoutMS: 2000,
+  connectTimeoutMS: 2000,
 }
 
 let client: MongoClient

@@ -49,12 +49,19 @@ export async function GET(request: NextRequest) {
       query = { projects: { $in: [project] } }
     }
     
-    const blogs = await db.collection('blogs').find(query).sort({ createdAt: -1 }).toArray()
-    console.log(`Admin API: project=${project}, found ${blogs.length} blogs`)
-    return Response.json(blogs)
+    const blogs = await db.collection('blogs').find(query).sort({ createdAt: -1 }).limit(50).toArray()
+    return new Response(JSON.stringify(blogs), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
+    })
   } catch (error) {
     console.error('Blog API error:', error)
-    return Response.json([], { status: 200 })
+    return new Response(JSON.stringify([]), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 200
+    })
   }
 }
 
