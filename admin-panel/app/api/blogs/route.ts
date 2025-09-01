@@ -40,19 +40,27 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const db = await getDb()
-    const { searchParams } = new URL(request.url)
-    const project = searchParams.get('project')
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Timeout')), 1000)
+    )
     
-    let query = {}
-    if (project) {
-      query = { projects: { $in: [project] } }
-    }
+    const dbPromise = (async () => {
+      const db = await getDb()
+      const { searchParams } = new URL(request.url)
+      const project = searchParams.get('project')
+      
+      let query = {}
+      if (project) {
+        query = { projects: { $in: [project] } }
+      }
+      
+      return await db.collection('blogs').find(query).sort({ createdAt: -1 }).toArray()
+    })()
     
-    const blogs = await db.collection('blogs').find(query).sort({ createdAt: -1 }).toArray()
+    const blogs = await Promise.race([dbPromise, timeoutPromise])
     return Response.json(blogs)
   } catch (error) {
-    console.error('MongoDB connection failed:', error)
+    console.error('Blog fetch error:', error)
     return Response.json([])
   }
 }
