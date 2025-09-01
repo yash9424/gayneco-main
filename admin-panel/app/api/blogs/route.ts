@@ -49,17 +49,24 @@ export async function GET(request: NextRequest) {
       query = { projects: { $in: [project] } }
     }
     
-    const blogs = await db.collection('blogs').find(query).sort({ createdAt: -1 }).limit(50).toArray()
-    return new Response(JSON.stringify(blogs), {
+    const blogs = await db.collection('blogs').find(query).sort({ createdAt: -1 }).toArray()
+    const response = JSON.stringify(blogs)
+    
+    return new Response(response, {
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
+        'Content-Length': response.length.toString(),
+        'Connection': 'close'
       }
     })
   } catch (error) {
     console.error('Blog API error:', error)
-    return new Response(JSON.stringify([]), {
-      headers: { 'Content-Type': 'application/json' },
+    return new Response('[]', {
+      headers: { 
+        'Content-Type': 'application/json',
+        'Content-Length': '2',
+        'Connection': 'close'
+      },
       status: 200
     })
   }
