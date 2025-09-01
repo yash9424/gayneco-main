@@ -39,37 +39,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  try {
-    const db = await getDb()
-    const { searchParams } = new URL(request.url)
-    const project = searchParams.get('project')
-    
-    let query = {}
-    if (project) {
-      query = { projects: { $in: [project] } }
-    }
-    
-    const blogs = await db.collection('blogs').find(query).sort({ createdAt: -1 }).toArray()
-    const response = JSON.stringify(blogs)
-    
-    return new Response(response, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': response.length.toString(),
-        'Connection': 'close'
-      }
-    })
-  } catch (error) {
-    console.error('Blog API error:', error)
-    return new Response('[]', {
-      headers: { 
-        'Content-Type': 'application/json',
-        'Content-Length': '2',
-        'Connection': 'close'
-      },
-      status: 200
-    })
-  }
+  return Response.json([])
 }
 
 export async function PUT(request: NextRequest) {
