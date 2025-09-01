@@ -3,6 +3,7 @@ import { getDb } from '../../../lib/mongodb'
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('POST /api/blogs - Starting blog creation')
     const formData = await request.formData()
     const title = formData.get('title') as string
     const excerpt = formData.get('excerpt') as string
@@ -11,11 +12,19 @@ export async function POST(request: NextRequest) {
     const projects = JSON.parse(projectsString || '[]')
     const imageFile = formData.get('image') as File | null
     
+    console.log('Blog data received:', { title, excerpt, projects })
+    
+    if (!title || !excerpt || !content) {
+      console.log('Missing required fields')
+      return Response.json({ success: false, error: 'Missing required fields' }, { status: 400 })
+    }
+    
     let imageBase64 = null
     if (imageFile) {
       const bytes = await imageFile.arrayBuffer()
       const buffer = Buffer.from(bytes)
       imageBase64 = buffer.toString('base64')
+      console.log('Image processed, size:', imageBase64.length)
     }
     
     const blogPost = {
@@ -28,13 +37,18 @@ export async function POST(request: NextRequest) {
       createdAt: new Date()
     }
 
-    console.log('Creating blog with projects:', projects)
+    console.log('Connecting to MongoDB...')
     const db = await getDb()
-    await db.collection('blogs').insertOne(blogPost)
-    return Response.json({ success: true })
+    console.log('MongoDB connected, inserting blog...')
+    const result = await db.collection('blogs').insertOne(blogPost)
+    console.log('Blog inserted with ID:', result.insertedId)
+    return Response.json({ success: true, id: result.insertedId })
   } catch (error) {
     console.error('Blog POST error:', error)
-    return Response.json({ success: false, error: 'Failed to create blog' }, { status: 500 })
+    return Response.json({ 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Failed to create blog' 
+    }, { status: 500 })
   }
 }
 
