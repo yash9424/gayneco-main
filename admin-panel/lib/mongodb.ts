@@ -1,6 +1,6 @@
 import { MongoClient, Db } from 'mongodb'
 
-const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017'
+const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017'
 const options = {
   maxPoolSize: 10,
   serverSelectionTimeoutMS: 5000,
