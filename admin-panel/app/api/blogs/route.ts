@@ -39,7 +39,22 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  return Response.json([])
+  try {
+    const db = await getDb()
+    const { searchParams } = new URL(request.url)
+    const project = searchParams.get('project')
+    
+    let query = {}
+    if (project) {
+      query = { projects: { $in: [project] } }
+    }
+    
+    const blogs = await db.collection('blogs').find(query).sort({ createdAt: -1 }).toArray()
+    return Response.json(blogs)
+  } catch (error) {
+    console.error('MongoDB connection failed:', error)
+    return Response.json([])
+  }
 }
 
 export async function PUT(request: NextRequest) {
