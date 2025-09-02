@@ -7,16 +7,16 @@ import { useToast, ToastComponent } from '@/components/ui/toast'
 import { Globe, MessageSquare, FileText, Users, Activity, Settings, Moon, Sun, Menu, X, LogOut, Eye, EyeOff, Plus, Upload, Edit, Trash2, Send, Bell, BarChart3 } from 'lucide-react'
 
 const PROJECTS = [
-  { name: 'AHCCCSHelp', port: 3001, domain: 'https://ahcccshelp.com', color: 'bg-blue-500' },
-  { name: 'First-Trimester', port: 3002, domain: 'https://firsttrimesterpregnancy.com', color: 'bg-green-500' },
-  { name: 'FreePregnencyTest', port: 3003, domain: 'https://freepregnancytestaz.com', color: 'bg-purple-500' },
-  { name: 'Low-cost-pregnancy', port: 3004, domain: 'https://lowcostpregnancy.com', color: 'bg-orange-500' },
-  { name: 'NeedUltraSound', port: 3005, domain: 'https://needultrasoundtoday.com', color: 'bg-pink-500' },
-  { name: 'Pregnancy-Test', port: 3006, domain: 'https://firstpregnancytest.com', color: 'bg-indigo-500' },
-  { name: 'SameDayUltraSound', port: 3007, domain: 'https://samedayultrasoundaz.com', color: 'bg-teal-500' },
-  { name: 'Teen-Pregnancy-Support', port: 3008, domain: 'https://teenpregnancysupportaz.com', color: 'bg-red-500' },
-  { name: 'WalkIn-Pregnancy', port: 3009, domain: 'https://walkinpregnancy.com', color: 'bg-yellow-500' },
-  { name: 'Wic-Pregnancy-help', port: 3010, domain: 'https://wicpregnancyhelp.com', color: 'bg-cyan-500' }
+  { name: 'AHCCCSHelp', port: 3001, domain: 'ahcccshelp.com', color: 'bg-blue-500' },
+  { name: 'First-Trimester', port: 3002, domain: 'firsttrimesterpregnancy.com', color: 'bg-green-500' },
+  { name: 'FreePregnencyTest', port: 3003, domain: 'freepregnancytestaz.com', color: 'bg-purple-500' },
+  { name: 'Low-cost-pregnancy', port: 3004, domain: 'lowcostpregnancy.com', color: 'bg-orange-500' },
+  { name: 'NeedUltraSound', port: 3005, domain: 'needultrasoundtoday.com', color: 'bg-pink-500' },
+  { name: 'Pregnancy-Test', port: 3006, domain: 'firstpregnancytest.com', color: 'bg-indigo-500' },
+  { name: 'SameDayUltraSound', port: 3007, domain: 'samedayultrasoundaz.com', color: 'bg-teal-500' },
+  { name: 'Teen-Pregnancy-Support', port: 3008, domain: 'teenpregnancysupportaz.com', color: 'bg-red-500' },
+  { name: 'WalkIn-Pregnancy', port: 3009, domain: 'walkinpregnancy.com', color: 'bg-yellow-500' },
+  { name: 'Wic-Pregnancy-help', port: 3010, domain: 'wicpregnancyhelp.com', color: 'bg-cyan-500' }
 ]
 
 const BLOG_SITES = [
@@ -565,23 +565,30 @@ export default function AdminPanel() {
             )}
 
             {activeTab === 'projects' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 {PROJECTS.map((project, index) => (
                   <div
                     key={project.name}
-                    className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300"
+                    className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 flex flex-col"
                   >
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className={`w-3 h-3 rounded-full ${project.color}`}></div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{project.name}</h3>
+                    <div className="flex items-center space-x-3 mb-3 sm:mb-4">
+                      <div className={`w-3 h-3 rounded-full ${project.color} flex-shrink-0`}></div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base truncate">{project.name}</h3>
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{project.domain}</p>
-                    <Button 
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                      onClick={() => window.open(project.domain, '_blank')}
-                    >
-                      <Globe className="w-4 h-4 mr-2" />
-                      View Site
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4 break-all">{project.domain}</p>
+                    <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm sm:text-base font-medium rounded-lg transition-colors duration-200">
+                      <a 
+                        href={`https://${project.domain}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center space-x-2 min-h-[40px]"
+                        onClick={(e) => {
+                          console.log('Clicking link to:', `https://${project.domain}`)
+                        }}
+                      >
+                        <Globe className="w-4 h-4 flex-shrink-0" />
+                        <span className="truncate">View Site</span>
+                      </a>
                     </Button>
                   </div>
                 ))}
@@ -1036,6 +1043,12 @@ export default function AdminPanel() {
                   onChange={(e) => {
                     const file = e.target.files?.[0]
                     if (file) {
+                      // Check file size (2MB limit)
+                      if (file.size > 2 * 1024 * 1024) {
+                        error('Image must be less than 2MB')
+                        e.target.value = ''
+                        return
+                      }
                       setBlogForm({...blogForm, image: file})
                       const reader = new FileReader()
                       reader.onload = (e) => setImagePreview(e.target?.result as string)
