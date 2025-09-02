@@ -383,6 +383,16 @@ export default function HomePage() {
             <p className="text-gray-400">
               © 2025 SameDayUltrasoundAZ.com
             </p>
+            <p className="text-gray-500 text-sm mt-2">
+              Powered by <a 
+                href="https://technovatechnologies.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-teal-400 font-medium hover:text-teal-300 transition-colors duration-300"
+              >
+                Technova Technologies
+              </a>
+            </p>
           </div>
         </div>
       </footer>
