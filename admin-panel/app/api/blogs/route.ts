@@ -54,24 +54,21 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Timeout')), 1000)
-    )
+    const db = await getDb()
+    const { searchParams } = new URL(request.url)
+    const project = searchParams.get('project')
     
-    const dbPromise = (async () => {
-      const db = await getDb()
-      const { searchParams } = new URL(request.url)
-      const project = searchParams.get('project')
-      
-      let query = {}
-      if (project) {
-        query = { projects: { $in: [project] } }
-      }
-      
-      return await db.collection('blogs').find(query).sort({ createdAt: -1 }).toArray()
-    })()
+    let query = {}
+    if (project) {
+      query = { projects: { $in: [project] } }
+    }
     
-    const blogs = await Promise.race([dbPromise, timeoutPromise])
+    // Exclude image data from list response to prevent large payloads
+    const blogs = await db.collection('blogs')
+      .find(query, { projection: { title: 1, excerpt: 1, projects: 1, createdAt: 1, active: 1 } })
+      .sort({ createdAt: -1 })
+      .toArray()
+    
     return Response.json(blogs)
   } catch (error) {
     console.error('Blog fetch error:', error)
