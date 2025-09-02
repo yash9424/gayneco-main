@@ -1032,7 +1032,7 @@ export default function AdminPanel() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Image</label>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png"
                   onChange={(e) => {
                     const file = e.target.files?.[0]
                     if (file) {
