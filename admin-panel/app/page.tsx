@@ -576,20 +576,18 @@ export default function AdminPanel() {
                       <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base truncate">{project.name}</h3>
                     </div>
                     <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4 break-all">{project.domain}</p>
-                    <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm sm:text-base font-medium rounded-lg transition-colors duration-200">
-                      <a 
-                        href={`https://${project.domain}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center space-x-2 min-h-[40px]"
-                        onClick={(e) => {
-                          console.log('Clicking link to:', `https://${project.domain}`)
-                        }}
-                      >
-                        <Globe className="w-4 h-4 flex-shrink-0" />
-                        <span className="truncate">View Site</span>
-                      </a>
-                    </Button>
+                    <a 
+                      href={`https://${project.domain}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm sm:text-base font-medium rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 min-h-[40px] no-underline"
+                      onClick={(e) => {
+                        console.log('Clicking link to:', `https://${project.domain}`)
+                      }}
+                    >
+                      <Globe className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">View Site</span>
+                    </a>
                   </div>
                 ))}
               </div>
