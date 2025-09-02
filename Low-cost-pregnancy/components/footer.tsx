@@ -81,9 +81,21 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-300 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} LowCostPregnancyAZ.com. All rights reserved.
-          </p>
+          <div className="flex flex-col space-y-2">
+            <p className="text-gray-500 text-sm">
+              © {new Date().getFullYear()} LowCostPregnancyAZ.com. All rights reserved.
+            </p>
+            <p className="text-gray-400 text-xs">
+              Powered by <a 
+                href="https://technovatechnologies.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-pink-600 font-medium hover:text-pink-500 transition-colors duration-300"
+              >
+                Technova Technologies
+              </a>
+            </p>
+          </div>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="#" className="text-gray-500 hover:text-pink-600 text-sm transition-colors duration-300">
               Privacy Policy

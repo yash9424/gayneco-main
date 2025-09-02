@@ -189,18 +189,33 @@ export default function Footer() {
           className="border-t border-gray-800 dark:border-gray-700 mt-12 pt-8"
         >
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <motion.div 
-              className="flex items-center space-x-2"
-              whileHover={{ scale: 1.02 }}
-            >
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
+            <div className="flex flex-col space-y-2">
+              <motion.div 
+                className="flex items-center space-x-2"
+                whileHover={{ scale: 1.02 }}
               >
-                <Heart className="w-5 h-5 text-teal-400 dark:text-teal-300" />
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Heart className="w-5 h-5 text-teal-400 dark:text-teal-300" />
+                </motion.div>
+                <span className="text-gray-300 dark:text-gray-400">© 2025 AHCCCSPregnancyHelpAZ.com - All rights reserved</span>
               </motion.div>
-              <span className="text-gray-300 dark:text-gray-400">© 2025 AHCCCSPregnancyHelpAZ.com - All rights reserved</span>
-            </motion.div>
+              <motion.div 
+                className="text-sm text-gray-500 dark:text-gray-600"
+                whileHover={{ scale: 1.02 }}
+              >
+                Powered by <a 
+                  href="https://technovatechnologies.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-teal-400 dark:text-teal-300 font-medium hover:text-teal-300 dark:hover:text-teal-200 transition-colors duration-300"
+                >
+                  Technova Technologies
+                </a>
+              </motion.div>
+            </div>
             <div className="flex space-x-6 text-sm text-gray-400 dark:text-gray-500">
               {['Privacy Policy', 'Terms of Service', 'HIPAA Notice'].map((link, index) => (
                 <motion.span 

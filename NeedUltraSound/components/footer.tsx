@@ -89,6 +89,16 @@ export default function Footer() {
           className="border-t border-slate-700 mt-12 pt-8 text-center text-medical-100"
         >
           <p>&copy; {new Date().getFullYear()} NeedUltrasoundToday. All rights reserved.</p>
+          <p className="text-medical-200 text-sm mt-2">
+            Powered by <a 
+              href="https://technovatechnologies.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-medical-400 font-medium hover:text-medical-300 transition-colors duration-300"
+            >
+              Technova Technologies
+            </a>
+          </p>
           <div className="mt-2">
             <p className="text-medical-200 text-sm mb-2">4700 North 51st Avenue, Phoenix, Arizona 85031</p>
             <a 

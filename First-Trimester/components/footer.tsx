@@ -166,9 +166,21 @@ export default function Footer() {
           className="border-t border-gray-800 mt-12 pt-8"
         >
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="flex items-center space-x-2">
-              <Heart className="w-5 h-5 text-blue-400 fill-current" />
-              <span className="text-gray-300 text-sm">© 2025 FirstTrimesterCareAZ.com - All rights reserved</span>
+            <div className="flex flex-col space-y-2">
+              <div className="flex items-center space-x-2">
+                <Heart className="w-5 h-5 text-blue-400 fill-current" />
+                <span className="text-gray-300 text-sm">© 2025 FirstTrimesterCareAZ.com - All rights reserved</span>
+              </div>
+              <div className="text-sm text-gray-500">
+                Powered by <a 
+                  href="https://technovatechnologies.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 font-medium hover:text-blue-300 transition-colors duration-300"
+                >
+                  Technova Technologies
+                </a>
+              </div>
             </div>
             <div className="flex space-x-6 text-sm text-gray-400">
               {['Privacy Policy', 'Terms of Service', 'HIPAA Notice'].map((link, index) => (

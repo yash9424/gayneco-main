@@ -112,9 +112,21 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="border-t border-white/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-300 text-center md:text-left">
-              © 2025 Free Pregnancy Test Arizona. All rights reserved.
-            </p>
+            <div className="flex flex-col space-y-2">
+              <p className="text-gray-300 text-center md:text-left">
+                © 2025 Free Pregnancy Test Arizona. All rights reserved.
+              </p>
+              <p className="text-gray-400 text-sm text-center md:text-left">
+                Powered by <a 
+                  href="https://technovatechnologies.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-emerald-300 font-medium hover:text-emerald-200 transition-colors duration-300"
+                >
+                  Technova Technologies
+                </a>
+              </p>
+            </div>
             <div className="flex items-center space-x-6 text-sm text-gray-300">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>

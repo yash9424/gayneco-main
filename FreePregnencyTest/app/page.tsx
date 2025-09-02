@@ -249,10 +249,25 @@ export default function Component() {
         </div>
       </section>
 
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-gray-300 mb-2">
+            © {new Date().getFullYear()} FreePregnancyTestAZ.com - All rights reserved
+          </p>
+          <p className="text-gray-400 text-sm">
+            Powered by <a 
+              href="https://technovatechnologies.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-400 font-medium hover:text-blue-300 transition-colors duration-300"
+            >
+              Technova Technologies
+            </a>
+          </p>
+        </div>
+      </footer>
 
-      
-
-      
       <style jsx global>{`
         @keyframes fadeInUp {
           from {

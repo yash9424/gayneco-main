@@ -54,6 +54,16 @@ export default function Footer() {
           <p className="text-blue-200 text-xs">
             © {new Date().getFullYear()} Teen Pregnancy Support Arizona. Confidential care for all.
           </p>
+          <p className="text-blue-300 text-xs mt-1">
+            Powered by <a 
+              href="https://technovatechnologies.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-100 font-medium hover:text-white transition-colors duration-300"
+            >
+              Technova Technologies
+            </a>
+          </p>
         </div>
       </div>
     </footer>

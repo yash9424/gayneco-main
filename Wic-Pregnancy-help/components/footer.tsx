@@ -63,6 +63,16 @@ export default function Footer() {
             <p className="text-gray-400 text-xs">
               © {new Date().getFullYear()} WICPregnancyHelpAZ.com • Walk-ins Welcome
             </p>
+            <p className="text-gray-500 text-xs mt-1">
+              Powered by <a 
+                href="https://technovatechnologies.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-cyan-400 font-medium hover:text-cyan-300 transition-colors duration-300"
+              >
+                Technova Technologies
+              </a>
+            </p>
           </div>
         </div>
       </div>

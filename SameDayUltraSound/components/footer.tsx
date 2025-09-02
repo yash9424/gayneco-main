@@ -53,6 +53,16 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400">© 2025 SameDayUltrasound - All rights reserved</p>
+          <p className="text-gray-500 text-sm mt-2">
+            Powered by <a 
+              href="https://technovatechnologies.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-400 font-medium hover:text-blue-300 transition-colors duration-300"
+            >
+              Technova Technologies
+            </a>
+          </p>
         </div>
       </div>
     </footer>
