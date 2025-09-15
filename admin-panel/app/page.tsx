@@ -113,26 +113,70 @@ export default function AdminPanel() {
   const { toasts, removeToast, success, error, info } = useToast()
   const router = useRouter()
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
-    const isAuth = localStorage.getItem('adminAuth')
-    if (!isAuth) {
-      router.push('/login')
-      return
+    const checkAuth = () => {
+      const isAuth = localStorage.getItem('adminAuth')
+      if (!isAuth) {
+        router.push('/login')
+        return
+      }
+      setIsAuthenticated(true)
+      setIsLoading(false)
     }
+    
+    checkAuth()
   }, [router])
 
   useEffect(() => {
-    fetch('/api/blogs').then(r => r.json()).then(setBlogs)
-    fetchConversations()
-    fetchAnalytics()
-    
-    // Auto-refresh data every 30 seconds
-    const interval = setInterval(() => {
+    if (isAuthenticated) {
+      fetch('/api/blogs').then(r => r.json()).then(setBlogs)
       fetchConversations()
       fetchAnalytics()
-    }, 30000)
-    return () => clearInterval(interval)
-  }, [])
+      
+      // Auto-refresh data every 30 seconds
+      const interval = setInterval(() => {
+        fetchConversations()
+        fetchAnalytics()
+      }, 30000)
+      return () => clearInterval(interval)
+    }
+  }, [isAuthenticated])
+
+  useEffect(() => {
+    if (viewingChat) {
+      const fetchMessages = () => {
+        fetch(`/api/chat?chatId=${viewingChat.chatId}`)
+          .then(r => r.json())
+          .then(data => setChatMessages(data))
+      }
+      
+      fetchMessages()
+      const interval = setInterval(fetchMessages, 2000)
+      return () => clearInterval(interval)
+    }
+  }, [viewingChat])
+
+  useEffect(() => {
+    chatMessagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [chatMessages])
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return null
+  }
   
   const fetchAnalytics = async () => {
     try {
@@ -160,24 +204,6 @@ export default function AdminPanel() {
       setChats([])
     }
   }
-
-  useEffect(() => {
-    if (viewingChat) {
-      const fetchMessages = () => {
-        fetch(`/api/chat?chatId=${viewingChat.chatId}`)
-          .then(r => r.json())
-          .then(data => setChatMessages(data))
-      }
-      
-      fetchMessages()
-      const interval = setInterval(fetchMessages, 2000)
-      return () => clearInterval(interval)
-    }
-  }, [viewingChat])
-
-  useEffect(() => {
-    chatMessagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [chatMessages])
 
   const handleSendAdminMessage = async () => {
     if (!newMessage.trim() || !viewingChat) return
