@@ -114,8 +114,11 @@ export default function AdminPanel() {
   const router = useRouter()
 
   useEffect(() => {
-    // Auto-authenticate for direct dashboard access
-    localStorage.setItem('adminAuth', 'true')
+    const isAuth = localStorage.getItem('adminAuth')
+    if (!isAuth) {
+      router.push('/login')
+      return
+    }
   }, [router])
 
   useEffect(() => {
