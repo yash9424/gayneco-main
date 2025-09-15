@@ -12,7 +12,8 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/blogs')
+    const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'https://binzo.fun';
+    fetch(`${API_BASE}/api/blogs?project=AHCCCSHelp`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch')
         return res.json()

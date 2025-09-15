@@ -15,7 +15,7 @@ export default function BlogPost() {
 
   useEffect(() => {
     if (params.id) {
-      const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://72.60.30.153';
+      const API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'https://binzo.fun';
       fetch(`${API_BASE}/api/blogs/${params.id}`)
         .then(res => {
           if (!res.ok) throw new Error('Failed to fetch')
