@@ -63,9 +63,9 @@ export async function GET(request: NextRequest) {
       query = { projects: { $in: [project] } }
     }
     
-    // Exclude image data from list response to prevent large payloads
+    // Include image data for blog cards
     const blogs = await db.collection('blogs')
-      .find(query, { projection: { title: 1, excerpt: 1, projects: 1, createdAt: 1, active: 1 } })
+      .find(query)
       .sort({ createdAt: -1 })
       .toArray()
     
