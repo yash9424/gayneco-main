@@ -25,7 +25,7 @@ export default function Header() {
           <nav className="hidden md:flex items-center space-x-8">
             <a href="tel:6235550123" className="flex items-center space-x-2 text-emerald-600 hover:text-emerald-700 font-medium">
               <Phone className="w-4 h-4" />
-              <span>(623) 555-0123</span>
+              <span>623-846-7597</span>
             </a>
             <Link href="/" className="text-gray-700 hover:text-emerald-600 transition-all duration-300 font-medium relative group">
               {translations.nav.home}
@@ -63,7 +63,7 @@ export default function Header() {
             <div className="flex flex-col space-y-4">
               <a href="tel:6235550123" className="flex items-center space-x-2 text-emerald-600 hover:text-emerald-700 font-medium">
                 <Phone className="w-4 h-4" />
-                <span>(623) 555-0123</span>
+                <span>623-846-7597</span>
               </a>
               <Link href="/" className="text-gray-700 hover:text-emerald-600 transition-colors font-medium">
                 {translations.nav.home}
