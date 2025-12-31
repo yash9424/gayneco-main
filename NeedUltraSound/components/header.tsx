@@ -94,7 +94,7 @@ export default function Header() {
               className="flex items-center space-x-2 px-4 py-2 rounded-full bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-300"
             >
               <Phone className="h-4 w-4" />
-              <span className="font-medium text-sm">(123) 456-7890</span>
+              <span className="font-medium text-sm">623-846-7597</span>
             </a>
           </div>
 
